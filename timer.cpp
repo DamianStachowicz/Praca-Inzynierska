@@ -1,0 +1,71 @@
+#include "timer.h"
+
+Timer::Timer()
+{
+    currentTime = SDL_GetTicks();
+    // domyślna liczba klatek na sekundę oraz krok czasowy
+    FPS = 30;
+    dt = 10;
+    //stepsPerFrame = FPS / dt;
+    stepsPerFrame = 3;
+    lastFrameTime = SDL_GetTicks();
+}
+
+Timer::Timer(Uint8 FPS, Uint8 dt) {
+    currentTime = SDL_GetTicks();
+    stepsPerFrame = 1000 / dt / FPS;
+    if(stepsPerFrame < 1) {
+        FPS = 30;
+        dt = 10;
+    }
+    this->FPS = FPS;
+    this->dt = dt;
+    stepsPerFrame = 1000 / dt / FPS;
+}
+
+Uint8 Timer::GetFPS() {
+    return FPS;
+}
+
+Uint8 Timer::GetDt() {
+    return dt;
+}
+
+Uint16 Timer::GetStepsPerFrame() {
+    return stepsPerFrame;
+}
+
+void Timer::NextStep() {
+    while(SDL_GetTicks() - currentTime < dt) {}
+    currentTime = SDL_GetTicks();
+}
+
+void Timer::UpdateLastFrameTime() {
+    lastFrameTime = SDL_GetTicks();
+}
+
+bool Timer::Serialize(std::ofstream &file) {
+    if(!file.is_open()) {
+        std::cerr << "Błąd podczas próby serializacji stopera. Plik nie jest otwarty do zapisu." << std::endl;
+        return false;
+    }
+    file << "<Timer><FPS>" << (Uint16)FPS;
+    file << "</FPS><dt>" << (Uint16)dt;
+    file << "</dt><currentTime>" << currentTime;
+    file << "</currentTime><stepsPerFrame>" << stepsPerFrame;
+    file << "</stepsPerFrame></Timer>";
+    return true;
+}
+
+bool Timer::Deserialize(std::ifstream &file) {
+    if(!file.is_open()) {
+        std::cerr << "Błąd podczas próby deserializacji stopera. Plik nie jest otwarty do odczytu." << std::endl;
+        return false;
+    }
+    XMLhelper::SkipTag(file, "<Timer>");
+    FPS = (Uint8)stoi(XMLhelper::GetValue(file, "<FPS>"));
+    dt = (Uint8)stoi(XMLhelper::GetValue(file, "<dt>"));
+    currentTime = stoi(XMLhelper::GetValue(file, "<currentTime>"));
+    stepsPerFrame = stoi(XMLhelper::GetValue(file, "<stepsPerFrame>"));
+    return true;
+}
