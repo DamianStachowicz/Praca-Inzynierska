@@ -10,13 +10,17 @@ SpaceShip::SpaceShip() : Entity()
 
 void SpaceShip::Collide() {
     for(uint i = 0; i < colliding.size(); i++) {
-        switch (colliding[i]->type) {
+        Entity *ent = colliding[i];
+        switch (ent->type) {
             case ENTITY_TYPE_PLANET: health = 0; break;
-            case ENTITY_TYPE_ROCKET: break;
+            case ENTITY_TYPE_ROCKET: continue;
             case ENTITY_TYPE_SELLING_POINT: break;
-            case ENTITY_TYPE_PARTICLE: Bounce(colliding[i]); break;
-            default: Bounce(colliding[i]); health -= 10; break;
+            case ENTITY_TYPE_PARTICLE: Bounce(ent); break;
+            default: Bounce(ent); health -= 10; break;
         }
+        double sum = r + ent->r;
+        vector2d direction = (location - ent->location).Direction();
+        location = ent->location + direction * sum;
     }
     colliding.clear();
 }
@@ -46,7 +50,7 @@ void SpaceShip::Shoot(SDL_Renderer* renderer, vector2d initVelocity) {
     rocket = new Rocket();
     entities.push_back(rocket);
     vector2d location = this->location + vector2d(cos(rotation), sin(rotation));
-    rocket->Load(renderer, "gfx/rocket.png", 22, 1, 1, location, 1000);
+    rocket->Load(renderer, "gfx/rocket.png", 22, 1, 1, location, 10000);
     rocket->SetInitialVelocity(velocity + initVelocity);
     rocket->rotation = this->rotation;
 }

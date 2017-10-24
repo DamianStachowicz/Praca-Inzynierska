@@ -11,7 +11,13 @@ void Asteroid::ReactToBlast(vector2d force) {
 }
 
 void Asteroid::ParticleCollide(Entity *particle) {
-    velocity = velocity + ( particle->Momentum() / mass );
+    // velocity = velocity + ( particle->Momentum() / mass );
+
+    double massFactor = 2 * particle->mass / (mass + particle->mass);
+    vector2d loc = (location - particle->location);
+    double a = (velocity - particle->velocity) * loc;
+    double b = loc.Length() * loc.Length();
+    velocity = velocity - loc * (massFactor * a / b);
 }
 
 bool Asteroid::Serialize(std::ofstream &file) {

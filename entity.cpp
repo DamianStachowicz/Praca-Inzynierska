@@ -152,7 +152,12 @@ vector2d Entity::Momentum() {
 }
 
 void Entity::Bounce(Entity *ent) {
-    velocity = ( velocity*(mass - ent->mass) + ent->velocity*2*ent->mass ) / (mass + ent->mass);
+    //velocity = ( velocity*(mass - ent->mass) + ent->velocity*2*ent->mass ) / (mass + ent->mass);
+    double massFactor = 2 * ent->mass / (mass + ent->mass);
+    vector2d loc = (location - ent->location);
+    double a = (velocity - ent->velocity) * loc;
+    double b = loc.Length() * loc.Length();
+    velocity = velocity - loc * (massFactor * a / b);
 }
 
 vector2d Entity::GetMinimapLocation(double ratio) {

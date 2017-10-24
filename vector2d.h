@@ -20,5 +20,7 @@ class vector2d
         vector2d operator *(double a);
         vector2d operator /(double a);
         vector2d operator -();
+        double operator *(vector2d v);
+        vector2d ProjectTo(vector2d v);
 };
 #endif // VECTOR2D_H

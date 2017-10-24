@@ -50,3 +50,11 @@ vector2d vector2d::operator /(double a) {
 vector2d vector2d::operator -() {
     return vector2d(-x, -y);
 }
+
+double vector2d::operator *(vector2d v) {
+    return x * v.x + y * v.y;
+}
+
+vector2d vector2d::ProjectTo(vector2d v) {
+    return v * (vector2d(this->x, this->y) * v / v.Length());
+}

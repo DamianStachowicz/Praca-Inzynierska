@@ -46,8 +46,6 @@ class Entity
          * założono, że każda encja jest mniej-więcej okrągła,
          * założono, że środek geometryczny jest też środkiem masy
          */
-        double   r;     // promień
-        vector2d velocity;
         vector2d acceleration;
         vector2d force; // wypadkowa siła działająca na ciało
         Texture* texture;
@@ -65,6 +63,8 @@ class Entity
         double rotation;
         Uint8  type;
         double mass;
+        vector2d velocity;
+        double   r;     // promień
 
         Entity();
         virtual ~Entity();
