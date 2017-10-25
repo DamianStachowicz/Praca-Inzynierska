@@ -54,6 +54,7 @@ class Entity
         bool     alive;
         Animation animation;
         double maxSpeed;
+        vector2d collisionCenter;
 
     public:
         static Timer timer;
@@ -70,6 +71,8 @@ class Entity
         virtual ~Entity();
         virtual void Load(SDL_Renderer* renderer, std::string texturePath, Sint16 frameHeight, Uint8 numberOfFrames,
                   Uint8 framesPerSecond, vector2d initLocation, double mass);
+        virtual void Load(SDL_Renderer* renderer, std::string texturePath, Sint16 frameHeight, Uint8 numberOfFrames,
+                  Uint8 framesPerSecond, vector2d initLocation, double mass, vector2d collisionCenter, double r);
         void SetInitialVelocity(vector2d v);
         void Render();
         void Render(double xOffset, double yOffset);

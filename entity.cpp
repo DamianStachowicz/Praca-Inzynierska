@@ -42,7 +42,8 @@ bool Entity::CheckCollision(Entity* ent) {
     return (v.Length() < radia);
 }
 
-void Entity::Load(SDL_Renderer *renderer, std::__cxx11::string texturePath, Sint16 frameHeight, Uint8 numberOfFrames, Uint8 framesPerSecond, vector2d initLocation, double mass) {
+void Entity::Load(SDL_Renderer *renderer, std::__cxx11::string texturePath, Sint16 frameHeight, Uint8 numberOfFrames,
+                  Uint8 framesPerSecond, vector2d initLocation, double mass) {
     texture = new Texture(renderer, texturePath);
     if(texture->Width() > frameHeight) {
         r = texture->Width() / 2;
@@ -52,6 +53,22 @@ void Entity::Load(SDL_Renderer *renderer, std::__cxx11::string texturePath, Sint
     animation = Animation(numberOfFrames, framesPerSecond, texture->Width(), frameHeight);
     location = initLocation;
     this->mass = mass;
+    this->collisionCenter = vector2d(r, r);
+}
+
+void Entity::Load(SDL_Renderer *renderer, std::__cxx11::string texturePath, Sint16 frameHeight, Uint8 numberOfFrames,
+                  Uint8 framesPerSecond, vector2d initLocation, double mass, vector2d collisionCenter, double r) {
+    texture = new Texture(renderer, texturePath);
+    if(texture->Width() > frameHeight) {
+        r = texture->Width() / 2;
+    } else {
+        r = frameHeight / 2;
+    }
+    animation = Animation(numberOfFrames, framesPerSecond, texture->Width(), frameHeight);
+    location = initLocation;
+    this->mass = mass;
+    this->collisionCenter = collisionCenter;
+    this->r = r;
 }
 
 void Entity::SetInitialVelocity(vector2d v) {
@@ -59,6 +76,7 @@ void Entity::SetInitialVelocity(vector2d v) {
 }
 
 void Entity::Render(double xOffset, double yOffset) {
+    double halfWidth = texture->Width() / 2;
     // Położenie i rozmiar muszą zostać dostosowane do położenia kamery (trójwymiarowego)
     double camX = Camera::camera.location.x;
     double camY = Camera::camera.location.y;
@@ -67,8 +85,8 @@ void Entity::Render(double xOffset, double yOffset) {
     double offsetY = ( (1 - zoom) * Camera::camera.windowHeight ) / 2;
     texture->Render(0, animation.CurrentFrame() * animation.Height(),     // srcX, srcY
                     animation.Width(), animation.Height(),                // srcWidth, srcHeight
-                    (location.x - r + camX + xOffset) * zoom + offsetX,           // destX
-                    (location.y - r + camY + yOffset) * zoom + offsetY,           // destY
+                    (location.x - halfWidth + camX + xOffset) * zoom + offsetX,           // destX
+                    (location.y - halfWidth + camY + yOffset) * zoom + offsetY,           // destY
                     animation.Width() * zoom, animation.Height() * zoom,  // destWidth, destHeight
                     rotation, SDL_FLIP_NONE);
 }
