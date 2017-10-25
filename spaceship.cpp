@@ -15,7 +15,7 @@ void SpaceShip::Collide() {
             case ENTITY_TYPE_PLANET: health = 0; break;
             case ENTITY_TYPE_ROCKET: continue;
             case ENTITY_TYPE_SELLING_POINT: break;
-            case ENTITY_TYPE_PARTICLE: Bounce(ent); break;
+            case ENTITY_TYPE_PARTICLE: continue;
             default: Bounce(ent); health -= 10; break;
         }
         double sum = r + ent->r;

@@ -33,7 +33,7 @@ Entity::~Entity() {
 
 bool Entity::CheckCollision(Entity* ent) {
     // wektor odległości między środkami encji
-    vector2d v = this->location - ent->location;
+    vector2d v = (this->location + this->collisionCenter) - (ent->location + ent->collisionCenter);
     // suma promieni
     double radia = this->r + ent->r;
     /* kolizja nastąpiła, jeśli odległość między
