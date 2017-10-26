@@ -53,17 +53,12 @@ void Entity::Load(SDL_Renderer *renderer, std::__cxx11::string texturePath, Sint
     animation = Animation(numberOfFrames, framesPerSecond, texture->Width(), frameHeight);
     location = initLocation;
     this->mass = mass;
-    this->collisionCenter = vector2d(r, r);
+    this->collisionCenter = vector2d(0, 0);
 }
 
 void Entity::Load(SDL_Renderer *renderer, std::__cxx11::string texturePath, Sint16 frameHeight, Uint8 numberOfFrames,
                   Uint8 framesPerSecond, vector2d initLocation, double mass, vector2d collisionCenter, double r) {
     texture = new Texture(renderer, texturePath);
-    if(texture->Width() > frameHeight) {
-        r = texture->Width() / 2;
-    } else {
-        r = frameHeight / 2;
-    }
     animation = Animation(numberOfFrames, framesPerSecond, texture->Width(), frameHeight);
     location = initLocation;
     this->mass = mass;
@@ -451,7 +446,8 @@ bool Entity::Serialize(std::ofstream& file) {
     file << "</location><rotation>" << rotation;
     file << "</rotation><type>" << (Uint32)type;
     file << "</type><mass>" << mass;
-    file << "</mass>";
+    file << "</mass><collisionCenter>" << collisionCenter.x << ":" << collisionCenter.y;
+    file << "</collisionCenter>";
     animation.Serialize(file);
     file << "</Entity>";
     return true;
@@ -483,6 +479,7 @@ bool Entity::Deserialize(std::ifstream& file, SDL_Renderer* renderer) {
     rotation = std::stod(XMLhelper::GetValue(file, "<rotation>"));
     type = (Uint8)std::stoi(XMLhelper::GetValue(file, "<type>"));
     mass = std::stod(XMLhelper::GetValue(file, "<mass>"));
+    collisionCenter = XMLhelper::GetValue(file, "<collisionCenter>");
     XMLhelper::SkipTag(file, "<Animation>");
     animation.Deserialize(file);
     XMLhelper::SkipTag(file, "</Animation>");

@@ -38,7 +38,8 @@ bool Asteroid::Serialize(std::ofstream &file) {
     file << "</location><rotation>" << rotation;
     file << "</rotation><type>" << (Uint32)type;
     file << "</type><mass>" << mass;
-    file << "</mass>";
+    file << "</mass><collisionCenter>" << collisionCenter.x << ":" << collisionCenter.y;
+    file << "</collisionCenter>";
     animation.Serialize(file);
     file << "</Asteroid>";
     return true;
@@ -71,6 +72,7 @@ bool Asteroid::Deserialize(std::ifstream &file, SDL_Renderer* renderer) {
     rotation = std::stod(XMLhelper::GetValue(file, "<rotation>"));
     type = (Uint8)std::stoi(XMLhelper::GetValue(file, "<type>"));
     mass = std::stod(XMLhelper::GetValue(file, "<mass>"));
+    collisionCenter = XMLhelper::GetValue(file, "<collisionCenter>");
     //size = std::stoi(XMLhelper::GetValue(file, "<size>"));
     XMLhelper::SkipTag(file, "<Animation>");
     animation.Deserialize(file);

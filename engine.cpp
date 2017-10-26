@@ -101,14 +101,10 @@ bool Engine::Init() {
 
     std::ifstream ifile;
     //ifile.open("Test-2-asteroids.xml");
-    ifile.open("Test-planet.xml");
+    ifile.open("test1.xml");
     //ifile.open("planet.xml");
     Deserialize(ifile);
     ifile.close();
-
-    AsteroidBig *a = new AsteroidBig();
-    a->Load(renderer, "gfx/Asteroid-Big.png", 98, 1, 1, vector2d(-100, -200), 12000, vector2d(-50, -50), 50);
-    Entity::entities.push_back(a);
 
     return true;
 }

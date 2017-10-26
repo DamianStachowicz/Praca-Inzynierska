@@ -75,7 +75,8 @@ bool Rocket::Serialize(std::ofstream &file) {
     file << "</mass><blastRadius>" << blastRadius;
     file << "</blastRadius><startTime>" << startTime;
     file << "</startTime><lifeSpan>" << lifeSpan;
-    file << "</lifeSpan>";
+    file << "</lifeSpan><collisionCenter>" << collisionCenter.x << ":" << collisionCenter.y;
+    file << "</collisionCenter>";
     animation.Serialize(file);
     file << "</Rocket>";
     return true;
@@ -107,6 +108,7 @@ bool Rocket::Deserialize(std::ifstream &file, SDL_Renderer* renderer) {
     rotation = std::stod(XMLhelper::GetValue(file, "<rotation>"));
     type = (Uint8)std::stoi(XMLhelper::GetValue(file, "<type>"));
     mass = std::stod(XMLhelper::GetValue(file, "<mass>"));
+    collisionCenter = XMLhelper::GetValue(file, "<collisionCenter>");
     blastRadius = std::stod(XMLhelper::GetValue(file, "<blastRadius>"));
     startTime = std::stoul(XMLhelper::GetValue(file, "<statTime>"));
     lifeSpan = std::stoul(XMLhelper::GetValue(file, "<lifeSpan>"));
