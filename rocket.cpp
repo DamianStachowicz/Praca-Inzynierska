@@ -36,7 +36,7 @@ void Rocket::Explode() {
     for(uint i = 0; i < numberOfParticles; i++) {
         vector2d unitVector = vector2d(cos(i*angle), sin(i*angle));
         Particle* tmp = new Particle();
-        tmp->Load(texture->Renderer(), "gfx/particle.png", 34, 16, 32, location + unitVector / 10, particleMass);
+        tmp->Load(texture->Renderer(), "gfx/particle.png", 8, 16, 32, location + unitVector / 10, particleMass, vector2d(12, 0), 4);
         tmp->SetInitialVelocity(velocity + unitVector * initVelocity);
         tmp->rotation = 360 / numberOfParticles * i;
         entities.push_back(tmp);
