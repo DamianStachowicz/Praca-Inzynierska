@@ -184,29 +184,30 @@ void Engine::Render() {
 
     // Renderowanie encji
     for(uint i = 0; i < Entity::entities.size(); i++) {
-        Entity::entities[i]->Render();
+        Entity* ent = Entity::entities[i];
+        ent->Render();
 
         // Renderowanie kopii wszystkich encji, w celu zachowania iluzji cykliczności
         // należy pamiętać o tym, że strzałka y wskazuje w dół
         if(player->location.x < 0) {
             if(player->location.y > 0) {
-                Entity::entities[i]->RenderCopy(LEVEL_COPY_MIDDLE_BOTTOM);
-                Entity::entities[i]->RenderCopy(LEVEL_COPY_LEFT_BOTTOM);
-                Entity::entities[i]->RenderCopy(LEVEL_COPY_LEFT_MIDDLE);
+                ent->RenderCopy(LEVEL_COPY_MIDDLE_BOTTOM);
+                ent->RenderCopy(LEVEL_COPY_LEFT_BOTTOM);
+                ent->RenderCopy(LEVEL_COPY_LEFT_MIDDLE);
             } else {
-                Entity::entities[i]->RenderCopy(LEVEL_COPY_LEFT_MIDDLE);
-                Entity::entities[i]->RenderCopy(LEVEL_COPY_LEFT_TOP);
-                Entity::entities[i]->RenderCopy(LEVEL_COPY_MIDDLE_TOP);
+                ent->RenderCopy(LEVEL_COPY_LEFT_MIDDLE);
+                ent->RenderCopy(LEVEL_COPY_LEFT_TOP);
+                ent->RenderCopy(LEVEL_COPY_MIDDLE_TOP);
             }
         } else {
             if(player->location.y > 0) {
-                Entity::entities[i]->RenderCopy(LEVEL_COPY_RIGHT_MIDDLE);
-                Entity::entities[i]->RenderCopy(LEVEL_COPY_RIGHT_BOTTOM);
-                Entity::entities[i]->RenderCopy(LEVEL_COPY_MIDDLE_BOTTOM);
+                ent->RenderCopy(LEVEL_COPY_RIGHT_MIDDLE);
+                ent->RenderCopy(LEVEL_COPY_RIGHT_BOTTOM);
+                ent->RenderCopy(LEVEL_COPY_MIDDLE_BOTTOM);
             } else {
-                Entity::entities[i]->RenderCopy(LEVEL_COPY_MIDDLE_TOP);
-                Entity::entities[i]->RenderCopy(LEVEL_COPY_RIGHT_TOP);
-                Entity::entities[i]->RenderCopy(LEVEL_COPY_RIGHT_MIDDLE);
+                ent->RenderCopy(LEVEL_COPY_MIDDLE_TOP);
+                ent->RenderCopy(LEVEL_COPY_RIGHT_TOP);
+                ent->RenderCopy(LEVEL_COPY_RIGHT_MIDDLE);
             }
         }
     }

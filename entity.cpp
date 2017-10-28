@@ -33,7 +33,7 @@ Entity::~Entity() {
 
 bool Entity::CheckCollision(Entity* ent) {
     // wektor odległości między środkami encji
-    vector2d v = (this->location + this->collisionCenter) - (ent->location + ent->collisionCenter);
+    vector2d v = (this->location + this->CollisionCenter()) - (ent->location + ent->CollisionCenter());
     // suma promieni
     double radia = this->r + ent->r;
     /* kolizja nastąpiła, jeśli odległość między
@@ -485,4 +485,10 @@ bool Entity::Deserialize(std::ifstream& file, SDL_Renderer* renderer) {
     XMLhelper::SkipTag(file, "</Animation>");
     XMLhelper::SkipTag(file, "</Entity>");
     return true;
+}
+
+vector2d Entity::CollisionCenter() {
+    double angle = rotation * M_PI / 180;
+    return vector2d(collisionCenter.x * cos(angle) - collisionCenter.y * sin(angle),
+                    collisionCenter.x * sin(angle) + collisionCenter.y * cos(angle));
 }

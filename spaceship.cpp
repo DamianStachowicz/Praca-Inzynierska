@@ -50,7 +50,7 @@ void SpaceShip::Shoot(SDL_Renderer* renderer, vector2d initVelocity) {
     rocket = new Rocket();
     entities.push_back(rocket);
     vector2d location = this->location + vector2d(cos(rotation), sin(rotation));
-    rocket->Load(renderer, "gfx/rocket.png", 22, 1, 1, location, 10000);
+    rocket->Load(renderer, "gfx/rocket.png", 16, 2, 16, location, 10000, vector2d(17, 0), 8);
     rocket->SetInitialVelocity(velocity + initVelocity);
     rocket->rotation = this->rotation;
 }

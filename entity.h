@@ -54,7 +54,6 @@ class Entity
         bool     alive;
         Animation animation;
         double maxSpeed;
-        vector2d collisionCenter;
 
     public:
         static Timer timer;
@@ -66,6 +65,7 @@ class Entity
         double mass;
         vector2d velocity;
         double   r;     // promień
+        vector2d collisionCenter;
 
         Entity();
         virtual ~Entity();
@@ -99,6 +99,7 @@ class Entity
         static std::vector<GfxData> FilterGfxData(std::vector<GfxData> gfxData, Uint8 type);
         virtual bool Serialize(std::ofstream& file);
         virtual bool Deserialize(std::ifstream& file, SDL_Renderer* renderer);
+        vector2d CollisionCenter();
 };
 
 #endif // ENTITY_H
