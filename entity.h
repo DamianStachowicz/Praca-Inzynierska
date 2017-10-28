@@ -92,11 +92,6 @@ class Entity
         void Bounce(Entity* ent);
         vector2d GetMinimapLocation(double ratio);
         double GetMinimapR(double ratio);
-        static std::vector<GfxData> GetGfxData(std::string cfgFile);
-        static void GenerateLevel(SDL_Renderer* renderer, Uint32* score, double size, Uint32 timeLimit, Uint8 numberOfPlanets,
-                                  Uint8 numberOfAsteroids, Uint8 numberOfSellingPoints, Uint8 seed);
-        static Uint8 EntityTypeCode(std::string name);
-        static std::vector<GfxData> FilterGfxData(std::vector<GfxData> gfxData, Uint8 type);
         virtual bool Serialize(std::ofstream& file);
         virtual bool Deserialize(std::ifstream& file, SDL_Renderer* renderer);
         vector2d CollisionCenter();
