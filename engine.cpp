@@ -20,7 +20,8 @@ Engine::Engine()
     // ładowanie fontów
     font = NULL;
     scoreTexture = NULL;
-    scoreColor = {0xFF, 0xFF, 0x00, 0xFF};
+    scoreColor = {0x0, 0x0, 0x0, 0xFF};
+    scoreBg = NULL;
     timerTexture = NULL;
     timerColor = {0xFF, 0xFF, 0x00, 0xFF};
 }
@@ -70,7 +71,7 @@ bool Engine::Init() {
         return false;
     }
     // Ładowanie czcionki
-    font = TTF_OpenFont( "ttf/Gputeks-Regular.ttf", 14 );
+    font = TTF_OpenFont( "ttf/kenvector_future.ttf", 30 );
     if( font == NULL ) {
         std::cerr << "Engine::Engine() Błąd, nie udało się załadować czcionki. Błąd SDL_ttf: " << TTF_GetError() << std::endl;
     }
@@ -97,7 +98,8 @@ bool Engine::Init() {
     SDL_SetRenderDrawColor( renderer, 0x00, 0x00, 0x00, 0xFF );
 
     // Ustawienie tekstu wyniku
-    scoreTexture = new Texture(renderer, "Wynik: 0", font, scoreColor);
+    scoreTexture = new Texture(renderer, "0", font, scoreColor);
+    scoreBg = new Texture(renderer, "gfx/buttonBlue.png");
     timerTexture = new Texture(renderer, Entity::level.TimeLeftString(), font, timerColor);
 
     std::ifstream ifile;
@@ -170,8 +172,7 @@ void Engine::Loop() {
 
     // aktualizacja wyniku
     free(scoreTexture);
-    scoreTexture = new Texture(renderer, "Wynik: " + std::to_string(score) + " Wytrzymałość statku: " + std::to_string(player->Health())
-                               , font, scoreColor);
+    scoreTexture = new Texture(renderer, std::to_string(score), font, scoreColor);
     // aktualizacja licznika czasu
     free(timerTexture);
     timerTexture = new Texture(renderer, Entity::level.TimeLeftString(), font, timerColor);
@@ -214,7 +215,8 @@ void Engine::Render() {
     }
 
     // Rysowanie interfejsu
-    scoreTexture->Render(0, 0, 10, 10, 0);
+    scoreBg->Render(0, 0, 10, 10, 0);
+    scoreTexture->Render(0, 0, 15, 11, 0);
     timerTexture->Render(0, 0, windowWidth / 2 - 10, 10, 0);
 
     // Rysowanie wyrenderowanej klatki

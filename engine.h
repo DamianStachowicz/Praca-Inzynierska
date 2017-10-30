@@ -34,6 +34,7 @@ class Engine
         TTF_Font*     font;
         Texture*      scoreTexture;
         SDL_Color     scoreColor;
+        Texture*      scoreBg;
         Texture*      timerTexture;
         SDL_Color     timerColor;
 
