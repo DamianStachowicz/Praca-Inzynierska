@@ -24,7 +24,8 @@ Entity::Entity()
     deathAnimationStarted = 0;
     alive = true;
     animation = Animation();
-    maxSpeed = 2000;
+    maxSpeed = 2;
+    state = 0;
 }
 
 Entity::~Entity() {
@@ -66,19 +67,31 @@ void Entity::Load(SDL_Renderer *renderer, std::__cxx11::string texturePath, Sint
     this->r = r;
 }
 
+void Entity::Load(SDL_Renderer *renderer, std::__cxx11::string texturePath, Sint16 frameHeight, Sint16 frameWidth,
+                  Uint8 numberOfFrames, Uint8 framesPerSecond, vector2d initLocation, double mass,
+                  vector2d collisionCenter, double r) {
+    texture = new Texture(renderer, texturePath);
+    animation = Animation(numberOfFrames, framesPerSecond, frameWidth, frameHeight);
+    location = initLocation;
+    this->mass = mass;
+    this->collisionCenter = collisionCenter;
+    this->r = r;
+}
+
 void Entity::SetInitialVelocity(vector2d v) {
     velocity = v;
 }
 
 void Entity::Render(double xOffset, double yOffset) {
-    double halfWidth = texture->Width() / 2;
+    double halfWidth = animation.Width() / 2;
     // Położenie i rozmiar muszą zostać dostosowane do położenia kamery (trójwymiarowego)
     double camX = Camera::camera.location.x;
     double camY = Camera::camera.location.y;
     double zoom = Camera::camera.zoom;
     double offsetX = ( (1 - zoom) * Camera::camera.windowWidth ) / 2;
     double offsetY = ( (1 - zoom) * Camera::camera.windowHeight ) / 2;
-    texture->Render(0, animation.CurrentFrame() * animation.Height(),     // srcX, srcY
+    texture->Render(state * animation.Width(),
+                    animation.CurrentFrame() * animation.Height(),     // srcX, srcY
                     animation.Width(), animation.Height(),                // srcWidth, srcHeight
                     (location.x - halfWidth + camX + xOffset) * zoom + offsetX,           // destX
                     (location.y - halfWidth + camY + yOffset) * zoom + offsetY,           // destY

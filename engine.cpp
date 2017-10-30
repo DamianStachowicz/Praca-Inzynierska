@@ -78,6 +78,7 @@ bool Engine::Init() {
     // Tworzenie okna
     window = SDL_CreateWindow( "Stachowicz Damian Praca Dyplomowa 0.3", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                                windowWidth, windowHeight, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE );
+    // | SDL_WINDOW_FULLSCREEN_DESKTOP
     if( window == NULL )
     {
         std::cerr << "Engine::Init Błąd, nie udało się utworzyć okna. Błąd SDL: " << SDL_GetError() << std::endl;

@@ -12,17 +12,22 @@ void SpaceShip::Collide() {
     for(uint i = 0; i < colliding.size(); i++) {
         Entity *ent = colliding[i];
         switch (ent->type) {
-            case ENTITY_TYPE_PLANET: health = 0; break;
+            //case ENTITY_TYPE_PLANET: Bounce(ent); DecreaseHealth(20); break;
             case ENTITY_TYPE_ROCKET: continue;
             case ENTITY_TYPE_SELLING_POINT: break;
             case ENTITY_TYPE_PARTICLE: continue;
-            default: Bounce(ent); health -= 10; break;
+            default: Bounce(ent); DecreaseHealth(10); break;
         }
         double sum = r + ent->r;
         vector2d direction = (location - ent->location).Direction();
         location = ent->location + direction * sum;
     }
     colliding.clear();
+}
+
+void SpaceShip::DecreaseHealth(double amount) {
+    health -= amount;
+    state = ( 100 - health ) / 20;
 }
 
 void SpaceShip::UpdateForce() {
