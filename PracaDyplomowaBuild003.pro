@@ -23,7 +23,9 @@ SOURCES += main.cpp \
     level.cpp \
     minimap.cpp \
     xmlhelper.cpp \
-    button.cpp
+    button.cpp \
+    state.cpp \
+    ingamestate.cpp
 
 LIBS += -lSDL2 -lSDL2_image -lSDL2_ttf
 
@@ -47,4 +49,6 @@ HEADERS += \
     level.h \
     minimap.h \
     xmlhelper.h \
-    button.h
+    button.h \
+    state.h \
+    ingamestate.h
