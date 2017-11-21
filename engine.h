@@ -41,15 +41,6 @@ class Engine
         InGameState   inGameState;
         State*        currentState;
 
-        void Loop();   // główna pętla gry
-        void Render(); // funkcja rysująca obiekty na ekranie
-        void HandleEvent(SDL_Event* event); // obsługa zdarzeń
-        void HandleKeyDown(); // obsługa wciśnięcia klawisza na klawiaturze
-        void HandleKeyUp(); // obsługa puszczenia klawisza na klawiaturze
-        void HandleMouseMotion(SDL_MouseMotionEvent* event); // obsługa zdarzenia poruszenia kursorem
-        void HandleMouseButtonDown(SDL_MouseButtonEvent* event); // obsługa wciśnięcia przycisku myszy
-        void HandleMouseWheelScroll(SDL_MouseWheelEvent* event); // obsługa przesunięcia kułeczka myszy
-
     public:
         Uint32 score;
 

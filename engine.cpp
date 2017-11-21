@@ -106,7 +106,7 @@ bool Engine::Init() {
 
     // Inicjalizacja stanów gry
     inGameState = InGameState(renderer, windowWidth, windowHeight);
-    inGameState.Init(player);
+    inGameState.Init(player, &score);
     currentState = &inGameState;
 
     return true;
@@ -116,45 +116,6 @@ bool Engine::Init() {
  */
 void Engine::Run() {
     currentState->Run();
-}
-
-/** @brief Główna pętla, logika gry
- */
-void Engine::Loop() {
-    currentState->Loop();
-}
-
-/** @brief Metoda renderująca obiekty
- */
-void Engine::Render() {
-    currentState->Render();
-}
-
-void Engine::HandleEvent(SDL_Event* event)
-{
-
-}
-
-void Engine::HandleKeyDown()
-{
-
-}
-
-void Engine::HandleKeyUp()
-{
-
-}
-
-void Engine::HandleMouseMotion(SDL_MouseMotionEvent* event) {
-
-}
-
-void Engine::HandleMouseButtonDown(SDL_MouseButtonEvent *event) {
-
-}
-
-void Engine::HandleMouseWheelScroll(SDL_MouseWheelEvent *event) {
-
 }
 
 bool Engine::Serialize(std::ofstream &file) {

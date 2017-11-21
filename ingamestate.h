@@ -17,13 +17,13 @@ class InGameState : public State
         Texture*      timerTexture;
         SDL_Color     timerColor;
         SpaceShip*    player;
-        Uint32        score;
+        Uint32*       score;
 
     public:
         InGameState();
         InGameState(SDL_Renderer* renderer, Uint32 windowWidth, Uint32 windowHeight);
 
-        void Init(SpaceShip *player);
+        void Init(SpaceShip *player, Uint32* score);
         void Run();
         void Loop();   // główna pętla gry
         void Render(); // funkcja rysująca obiekty na ekranie

@@ -39,10 +39,10 @@ void InGameState::Run() {
     }
 }
 
-void InGameState::Init(SpaceShip* player) {
+void InGameState::Init(SpaceShip* player, Uint32* score) {
     keyStates = SDL_GetKeyboardState( NULL );
-    score = 0;
     this->player = player;
+    this->score = score;
     // ładowanie fontów
     font = NULL;
     scoreTexture = NULL;
@@ -98,7 +98,7 @@ void InGameState::Loop() {
 
     // aktualizacja wyniku
     free(scoreTexture);
-    scoreTexture = new Texture(renderer, std::to_string(score), font, scoreColor);
+    scoreTexture = new Texture(renderer, std::to_string(*score), font, scoreColor);
     // aktualizacja licznika czasu
     free(timerTexture);
     timerTexture = new Texture(renderer, Entity::level.TimeLeftString(), font, timerColor);
