@@ -105,9 +105,23 @@ bool Engine::Init() {
     ifile.close();
 
     // Inicjalizacja stanów gry
+    Texture* menuBg = new Texture(renderer, "gfx/darkPurple.png");
+    menuState = MenuState(renderer, windowWidth, windowHeight, menuBg);
+    Texture* defaultBtn  = new Texture(renderer, "gfx/buttonBlue.png");
+    Texture* selectedBtn = new Texture(renderer, "gfx/buttonRed.png");
+    Button* btn = new Button(renderer, defaultBtn, selectedBtn, font, "Graj", {0x0, 0x0, 0x0, 0xFF},
+                             windowWidth / 2 - 111, 20);
+    btn->Switch();
+    menuState.AddButton(btn);
+    btn = new Button(renderer, defaultBtn, selectedBtn, font, "Wczytaj gre", {0x0, 0x0, 0x0, 0xFF},
+                     windowWidth / 2 - 111, 80);
+    menuState.AddButton(btn);
+    btn = new Button(renderer, defaultBtn, selectedBtn, font, "Wyjdz", {0x0, 0x0, 0x0, 0xFF},
+                     windowWidth / 2 - 111, 140);
+    menuState.AddButton(btn);
     inGameState = InGameState(renderer, windowWidth, windowHeight);
     inGameState.Init(player, &score);
-    currentState = &inGameState;
+    currentState = &menuState;
 
     return true;
 }
@@ -221,4 +235,8 @@ bool Engine::Deserialize(std::ifstream &file) {
     Entity::level.Deserialize(file);
     Entity::timer.Deserialize(file);
     return true;
+}
+
+void Engine::StartGame() {
+    currentState = &inGameState;
 }

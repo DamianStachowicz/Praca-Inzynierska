@@ -9,6 +9,7 @@
 class State
 {
     protected:
+        SDL_Renderer* renderer;
         const Uint8*  keyStates;
         TTF_Font*     font;
         Uint32        windowWidth;

@@ -1,41 +1,28 @@
 #include "button.h"
 
-Button::Button()
-{
-    x = 0;
-    y = 0;
-    defaultT = NULL;
-    hoverT = NULL;
-}
-
-Button::Button(Texture *defaultT, Texture *hoverT, int x, int y, OnClickFunction OnClick) {
+Button::Button(SDL_Renderer *renderer, Texture *defaultBg, Texture *selectedBg, TTF_Font *font,
+               std::__cxx11::string text, SDL_Color color, int x, int y) {
+    this->renderer = renderer;
+    this->defaultBg = defaultBg;
+    this->selectedBg = selectedBg;
+    this->font = font;
+    this->text = text;
+    selected = false;
     this->x = x;
     this->y = y;
-    this->defaultT = defaultT;
-    this->hoverT = hoverT;
+    textTexture = new Texture(renderer, text, font, color);
     this->OnClick = OnClick;
 }
 
 void Button::Render() {
-    if(IsHovered()) {
-        hoverT->Render(0, 0, x, y, 0);
+    if(selected) {
+        selectedBg->Render(0, 0, x, y, 0);
     } else {
-        defaultT->Render(0, 0, x, y, 0);
+        defaultBg->Render(0, 0, x, y, 0);
     }
+    textTexture->Render(0, 0, x + defaultBg->Width() / 2 - textTexture->Width() / 2, y, 0);
 }
 
-bool Button::IsHovered() {
-    int mouseX, mouseY;
-    SDL_GetMouseState(&mouseX, &mouseY);
-
-    if(mouseX < x)
-        return false;
-    if(mouseX > x + defaultT->Width())
-        return false;
-    if(mouseY < y)
-        return false;
-    if(mouseY < y - defaultT->Height())
-        return false;
-
-    return true;
+void Button::Switch() {
+    selected = !selected;
 }

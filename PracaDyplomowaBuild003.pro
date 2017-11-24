@@ -25,7 +25,8 @@ SOURCES += main.cpp \
     xmlhelper.cpp \
     button.cpp \
     state.cpp \
-    ingamestate.cpp
+    ingamestate.cpp \
+    menustate.cpp
 
 LIBS += -lSDL2 -lSDL2_image -lSDL2_ttf
 
@@ -51,4 +52,5 @@ HEADERS += \
     xmlhelper.h \
     button.h \
     state.h \
-    ingamestate.h
+    ingamestate.h \
+    menustate.h

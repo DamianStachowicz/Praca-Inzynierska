@@ -19,6 +19,7 @@
 #include "asteroidbig.h"
 #include "sellingpoint.h"
 #include "ingamestate.h"
+#include "menustate.h"
 
 /** @class Engine
  *  @brief Silnik gry
@@ -39,7 +40,10 @@ class Engine
         Texture*      timerTexture;
         SDL_Color     timerColor;
         InGameState   inGameState;
+        MenuState     menuState;
         State*        currentState;
+
+        void StartGame();
 
     public:
         Uint32 score;

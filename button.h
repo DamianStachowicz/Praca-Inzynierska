@@ -12,18 +12,22 @@ class Button
 {
     private:
         SDL_Renderer* renderer;
-        Texture* defaultT;
-        Texture* hoverT;
+        Texture*      defaultBg;
+        Texture*      selectedBg;
+        Texture*      textTexture;
+        TTF_Font*     font;
 
     public:
+        std::string   text;
+        bool          selected;
         int x;
         int y;
 
-        Button();
-        Button(Texture* defaultT, Texture* hoverT, int x, int y, OnClickFunction OnClick);
+        Button(SDL_Renderer* renderer, Texture* defaultBg, Texture* selectedBg,
+               TTF_Font* font, std::string text, SDL_Color color, int x, int y);
         OnClickFunction OnClick;
-        bool IsHovered();
         void Render();
+        void Switch();
 };
 
 #endif // BUTTON_H

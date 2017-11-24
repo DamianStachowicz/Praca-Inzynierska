@@ -30,7 +30,6 @@ void InGameState::Run() {
         }
 
         if(player->Health() <= 0) {
-            std::cout << "Statek zniszczony. Położenie: " << player->location.x << ":" << player->location.y << std::endl;
             quit = true;
         }
 
