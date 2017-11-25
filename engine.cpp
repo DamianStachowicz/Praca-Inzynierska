@@ -109,15 +109,16 @@ bool Engine::Init() {
     menuState = MenuState(renderer, windowWidth, windowHeight, menuBg);
     Texture* defaultBtn  = new Texture(renderer, "gfx/buttonBlue.png");
     Texture* selectedBtn = new Texture(renderer, "gfx/buttonRed.png");
+    std::function<void()> func = std::bind(&Engine::StartGame, this);
     Button* btn = new Button(renderer, defaultBtn, selectedBtn, font, "Graj", {0x0, 0x0, 0x0, 0xFF},
-                             windowWidth / 2 - 111, 20);
+                             windowWidth / 2 - 111, 20, func);
     btn->Switch();
     menuState.AddButton(btn);
     btn = new Button(renderer, defaultBtn, selectedBtn, font, "Wczytaj gre", {0x0, 0x0, 0x0, 0xFF},
-                     windowWidth / 2 - 111, 80);
+                     windowWidth / 2 - 111, 80, NULL);
     menuState.AddButton(btn);
     btn = new Button(renderer, defaultBtn, selectedBtn, font, "Wyjdz", {0x0, 0x0, 0x0, 0xFF},
-                     windowWidth / 2 - 111, 140);
+                     windowWidth / 2 - 111, 140, NULL);
     menuState.AddButton(btn);
     inGameState = InGameState(renderer, windowWidth, windowHeight);
     inGameState.Init(player, &score);
@@ -129,7 +130,26 @@ bool Engine::Init() {
 /** @brief Metoda uruchamiająca grę
  */
 void Engine::Run() {
-    currentState->Run();
+    SDL_Event event;
+    bool quit = false;
+
+    // program pozostaje uruchomiony dopóki użytkownik nie zarząda zakończenia
+    while( !quit )
+    {
+        // przetwarzanie kolejki zdarzeń
+        while( SDL_PollEvent( &event ) != 0 )
+        {
+            // zamknięcie aplikacji
+            if(event.type == SDL_QUIT){
+                quit = true;
+            } else {
+                currentState->HandleEvent(&event);
+            }
+        }
+
+        currentState->Loop();
+        currentState->Render();
+    }
 }
 
 bool Engine::Serialize(std::ofstream &file) {

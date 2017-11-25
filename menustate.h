@@ -20,7 +20,6 @@ class MenuState : public State
         void AddButton(Button* btn);
         void ButtonUp();
         void ButtonDown();
-        void Run();
         void Loop();   // główna pętla gry
         void Render(); // funkcja rysująca obiekty na ekranie
         void HandleEvent(SDL_Event* event); // obsługa zdarzeń

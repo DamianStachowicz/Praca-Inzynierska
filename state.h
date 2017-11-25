@@ -19,7 +19,6 @@ class State
         State();
 
         virtual void Init();
-        virtual void Run();
         virtual void Loop();   // główna pętla gry
         virtual void Render(); // funkcja rysująca obiekty na ekranie
         virtual void HandleEvent(SDL_Event* event); // obsługa zdarzeń

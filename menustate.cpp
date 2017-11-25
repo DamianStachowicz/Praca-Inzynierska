@@ -32,29 +32,6 @@ void MenuState::ButtonDown() {
     buttons[currentBtnIdx]->Switch();
 }
 
-void MenuState::Run() {
-    SDL_Event event;
-    bool quit = false;
-
-    // program pozostaje uruchomiony dopóki użytkownik nie zarząda zakończenia
-    while( !quit )
-    {
-        // przetwarzanie kolejki zdarzeń
-        while( SDL_PollEvent( &event ) != 0 )
-        {
-            // zamknięcie aplikacji
-            if(event.type == SDL_QUIT){
-                quit = true;
-            } else {
-                HandleEvent(&event);
-            }
-        }
-
-        Loop();
-        Render();
-    }
-}
-
 void MenuState::HandleEvent(SDL_Event *event) {
     keyStates = SDL_GetKeyboardState( NULL );
     switch( event->type )
@@ -82,6 +59,8 @@ void MenuState::HandleKeyDown() {
         ButtonDown();
     } else if( keyStates[ SDL_SCANCODE_W ] || keyStates[ SDL_SCANCODE_UP ] ) {
         ButtonUp();
+    } else if( keyStates[ SDL_SCANCODE_RETURN ] ) {
+        buttons[ currentBtnIdx ]->OnClick();
     }
 }
 
@@ -100,8 +79,8 @@ void MenuState::Render() {
     // rendereowanie tła
     uint x = windowWidth / background->Width() + 1;
     uint y = windowHeight / background->Height() + 1;
-    for(int j = 0; j < y; j++) {
-        for(int i = 0; i < x; i++) {
+    for(uint j = 0; j < y; j++) {
+        for(uint i = 0; i < x; i++) {
             background->Render(0, 0, background->Width() * i, background->Height() * j, 0);
         }
     }

@@ -11,33 +11,6 @@ InGameState::InGameState(SDL_Renderer *renderer, Uint32 windowWidth, Uint32 wind
     this->player = player;
 }
 
-void InGameState::Run() {
-    SDL_Event event;
-    bool quit = false;
-
-    // program pozostaje uruchomiony dopóki użytkownik nie zarząda zakończenia
-    while( !quit )
-    {
-        // przetwarzanie kolejki zdarzeń
-        while( SDL_PollEvent( &event ) != 0 )
-        {
-            // zamknięcie aplikacji
-            if(event.type == SDL_QUIT){
-                quit = true;
-            } else {
-                HandleEvent(&event);
-            }
-        }
-
-        if(player->Health() <= 0) {
-            quit = true;
-        }
-
-        Loop();
-        Render();
-    }
-}
-
 void InGameState::Init(SpaceShip* player, Uint32* score) {
     keyStates = SDL_GetKeyboardState( NULL );
     this->player = player;

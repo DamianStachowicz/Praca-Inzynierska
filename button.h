@@ -4,9 +4,8 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <functional>
 #include "texture.h"
-
-typedef void (*OnClickFunction)(void);
 
 class Button
 {
@@ -23,9 +22,9 @@ class Button
         int x;
         int y;
 
-        Button(SDL_Renderer* renderer, Texture* defaultBg, Texture* selectedBg,
-               TTF_Font* font, std::string text, SDL_Color color, int x, int y);
-        OnClickFunction OnClick;
+        Button(SDL_Renderer* renderer, Texture* defaultBg, Texture* selectedBg, TTF_Font* font,
+               std::string text, SDL_Color color, int x, int y, std::function<void()> OnClick);
+        std::function<void()> OnClick;
         void Render();
         void Switch();
 };

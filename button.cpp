@@ -1,7 +1,7 @@
 #include "button.h"
 
 Button::Button(SDL_Renderer *renderer, Texture *defaultBg, Texture *selectedBg, TTF_Font *font,
-               std::__cxx11::string text, SDL_Color color, int x, int y) {
+               std::__cxx11::string text, SDL_Color color, int x, int y, std::function<void()> OnClick) {
     this->renderer = renderer;
     this->defaultBg = defaultBg;
     this->selectedBg = selectedBg;

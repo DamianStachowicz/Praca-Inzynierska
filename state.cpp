@@ -2,7 +2,6 @@
 
 State::State() {}
 void State::Init() {}
-void State::Run() {}
 void State::Loop() {}
 void State::Render() {}
 void State::HandleEvent(SDL_Event *event) {}
