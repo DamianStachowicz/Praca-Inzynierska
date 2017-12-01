@@ -65,6 +65,7 @@ void InGameState::Loop() {
             Entity::entities[j]->Collide();
         }
 
+        // przejście do kolejnego kroku czasowego
         Entity::timer.NextStep();
     }
 

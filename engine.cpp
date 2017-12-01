@@ -114,7 +114,7 @@ bool Engine::Init() {
                              windowWidth / 2 - 111, 20, func);
     btn->Switch();
     menuState.AddButton(btn);
-    btn = new Button(renderer, defaultBtn, selectedBtn, font, "Wczytaj gre", {0x0, 0x0, 0x0, 0xFF},
+    btn = new Button(renderer, defaultBtn, selectedBtn, TTF_OpenFont( "ttf/kenvector_future.ttf", 20 ), "Wybierz poziom", {0x0, 0x0, 0x0, 0xFF},
                      windowWidth / 2 - 111, 80, NULL);
     menuState.AddButton(btn);
     btn = new Button(renderer, defaultBtn, selectedBtn, font, "Wyjdz", {0x0, 0x0, 0x0, 0xFF},

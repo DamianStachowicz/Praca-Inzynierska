@@ -84,6 +84,7 @@ void Entity::SetInitialVelocity(vector2d v) {
 
 void Entity::Render(double xOffset, double yOffset) {
     double halfWidth = animation.Width() / 2;
+    double halfHeight = animation.Height() / 2;
     // Położenie i rozmiar muszą zostać dostosowane do położenia kamery (trójwymiarowego)
     double camX = Camera::camera.location.x;
     double camY = Camera::camera.location.y;
@@ -94,7 +95,7 @@ void Entity::Render(double xOffset, double yOffset) {
                     animation.CurrentFrame() * animation.Height(),     // srcX, srcY
                     animation.Width(), animation.Height(),                // srcWidth, srcHeight
                     (location.x - halfWidth + camX + xOffset) * zoom + offsetX,           // destX
-                    (location.y - halfWidth + camY + yOffset) * zoom + offsetY,           // destY
+                    (location.y - halfHeight + camY + yOffset) * zoom + offsetY,           // destY
                     animation.Width() * zoom, animation.Height() * zoom,  // destWidth, destHeight
                     rotation, SDL_FLIP_NONE);
 }

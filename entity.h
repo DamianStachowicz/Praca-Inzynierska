@@ -26,19 +26,6 @@ enum {
     ENTITY_TYPE_SELLING_POINT
 };
 
-class GfxData
-{
-    public:
-        std::string path;
-        Uint8 entityType;
-        Sint16 frameHeight;
-        Uint8 numberOfFrames;
-        Uint8 framesPerSecond;
-
-        GfxData();
-        GfxData(std::string data);
-};
-
 class Entity
 {
     protected:
