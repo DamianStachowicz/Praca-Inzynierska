@@ -78,37 +78,41 @@ void InGameState::Loop() {
 }
 
 void InGameState::Render() {
+    // aktualizacja położenia kamery
+    Camera::camera.location = player->location;
+
     // Czyszczenie renderera przed renderowaniem nowej klatki
     SDL_RenderClear(renderer);
 
     // Renderowanie encji
     for(uint i = 0; i < Entity::entities.size(); i++) {
         Entity* ent = Entity::entities[i];
-        ent->Render();
+        ent->RenderCopy(ent->VisibleCopy());
+        //ent->Render();
 
         // Renderowanie kopii wszystkich encji, w celu zachowania iluzji cykliczności
         // należy pamiętać o tym, że strzałka y wskazuje w dół
-        if(player->location.x < 0) {
-            if(player->location.y > 0) {
-                ent->RenderCopy(LEVEL_COPY_MIDDLE_BOTTOM);
-                ent->RenderCopy(LEVEL_COPY_LEFT_BOTTOM);
-                ent->RenderCopy(LEVEL_COPY_LEFT_MIDDLE);
-            } else {
-                ent->RenderCopy(LEVEL_COPY_LEFT_MIDDLE);
-                ent->RenderCopy(LEVEL_COPY_LEFT_TOP);
-                ent->RenderCopy(LEVEL_COPY_MIDDLE_TOP);
-            }
-        } else {
-            if(player->location.y > 0) {
-                ent->RenderCopy(LEVEL_COPY_RIGHT_MIDDLE);
-                ent->RenderCopy(LEVEL_COPY_RIGHT_BOTTOM);
-                ent->RenderCopy(LEVEL_COPY_MIDDLE_BOTTOM);
-            } else {
-                ent->RenderCopy(LEVEL_COPY_MIDDLE_TOP);
-                ent->RenderCopy(LEVEL_COPY_RIGHT_TOP);
-                ent->RenderCopy(LEVEL_COPY_RIGHT_MIDDLE);
-            }
-        }
+//        if(player->location.x < 0) {
+//            if(player->location.y > 0) {
+//                ent->RenderCopy(LEVEL_COPY_MIDDLE_BOTTOM);
+//                ent->RenderCopy(LEVEL_COPY_LEFT_BOTTOM);
+//                ent->RenderCopy(LEVEL_COPY_LEFT_MIDDLE);
+//            } else {
+//                ent->RenderCopy(LEVEL_COPY_LEFT_MIDDLE);
+//                ent->RenderCopy(LEVEL_COPY_LEFT_TOP);
+//                ent->RenderCopy(LEVEL_COPY_MIDDLE_TOP);
+//            }
+//        } else {
+//            if(player->location.y > 0) {
+//                ent->RenderCopy(LEVEL_COPY_RIGHT_MIDDLE);
+//                ent->RenderCopy(LEVEL_COPY_RIGHT_BOTTOM);
+//                ent->RenderCopy(LEVEL_COPY_MIDDLE_BOTTOM);
+//            } else {
+//                ent->RenderCopy(LEVEL_COPY_MIDDLE_TOP);
+//                ent->RenderCopy(LEVEL_COPY_RIGHT_TOP);
+//                ent->RenderCopy(LEVEL_COPY_RIGHT_MIDDLE);
+//            }
+//        }
     }
 
     // Rysowanie interfejsu

@@ -41,9 +41,6 @@ void SpaceShip::UpdateForce() {
     if(advance) {
         force = force + ( direction * jet );
     }
-    double camX = Camera::camera.windowWidth  / 2 - this->location.x;
-    double camY = Camera::camera.windowHeight / 2 - this->location.y;
-    Camera::camera.location = vector2d(camX, camY);
 }
 
 void SpaceShip::Rotate(double angle) {

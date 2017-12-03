@@ -85,6 +85,7 @@ class Entity
         virtual bool Serialize(std::ofstream& file);
         virtual bool Deserialize(std::ifstream& file, SDL_Renderer* renderer);
         vector2d CollisionCenter();
+        Uint8 VisibleCopy();
 };
 
 #endif // ENTITY_H

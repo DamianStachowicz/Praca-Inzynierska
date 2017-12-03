@@ -49,3 +49,39 @@ bool Camera::Deserialize(std::ifstream &file) {
     XMLhelper::SkipTag(file, "</Camera>");
     return true;
 }
+
+double Camera::LeftEdge(double levelR) {
+    double zoom = 1 / this->zoom;
+    if(location.x - (windowWidth / 2) * zoom < -levelR) {
+        return location.x - (windowWidth / 2) * zoom + (2 * levelR);
+    } else {
+        return location.x - (windowWidth / 2) * zoom;
+    }
+}
+
+double Camera::RightEdge(double levelR) {
+    double zoom = 1 / this->zoom;
+    if(location.x + (windowWidth / 2) * zoom > levelR) {
+        return location.x + (windowWidth / 2) * zoom - (2 * levelR);
+    } else {
+        return location.x + (windowWidth / 2) * zoom;
+    }
+}
+
+double Camera::TopEdge(double levelR) {
+    double zoom = 1 / this->zoom;
+    if(location.y - (windowHeight / 2) * zoom < -levelR) {
+        return location.y - (windowHeight / 2) * zoom + (2 * levelR);
+    } else {
+        return location.y - (windowHeight / 2) * zoom;
+    }
+}
+
+double Camera::BottomEdge(double levelR) {
+    double zoom = 1 / this->zoom;
+    if(location.y + (windowHeight / 2) * zoom > levelR) {
+        return location.y + (windowHeight / 2) * zoom - (2 * levelR);
+    } else {
+        return location.y + (windowHeight / 2) * zoom;
+    }
+}

@@ -85,17 +85,17 @@ void Entity::SetInitialVelocity(vector2d v) {
 void Entity::Render(double xOffset, double yOffset) {
     double halfWidth = animation.Width() / 2;
     double halfHeight = animation.Height() / 2;
+    Uint32 windowWidth = Camera::camera.windowWidth;
+    Uint32 windowHeight = Camera::camera.windowHeight;
     // Położenie i rozmiar muszą zostać dostosowane do położenia kamery (trójwymiarowego)
     double camX = Camera::camera.location.x;
     double camY = Camera::camera.location.y;
     double zoom = Camera::camera.zoom;
-    double offsetX = ( (1 - zoom) * Camera::camera.windowWidth ) / 2;
-    double offsetY = ( (1 - zoom) * Camera::camera.windowHeight ) / 2;
     texture->Render(state * animation.Width(),
                     animation.CurrentFrame() * animation.Height(),     // srcX, srcY
                     animation.Width(), animation.Height(),                // srcWidth, srcHeight
-                    (location.x - halfWidth + camX + xOffset) * zoom + offsetX,           // destX
-                    (location.y - halfHeight + camY + yOffset) * zoom + offsetY,           // destY
+                    (location.x - halfWidth  - camX + xOffset) * zoom + windowWidth / 2,  // destX
+                    (location.y - halfHeight - camY + yOffset) * zoom + windowHeight / 2, // destY
                     animation.Width() * zoom, animation.Height() * zoom,  // destWidth, destHeight
                     rotation, SDL_FLIP_NONE);
 }
@@ -197,6 +197,8 @@ double Entity::GetMinimapR(double ratio) {
 
 void Entity::RenderCopy(int position) {
     switch(position) {
+        case LEVEL_COPY_NONE: break;
+        case LEVEL_COPY_DEFAULT: Render(0, 0); break;
         case LEVEL_COPY_MIDDLE_BOTTOM: Render(0, 2 * level.r); break;
         case LEVEL_COPY_LEFT_BOTTOM: Render(-2 * level.r, 2 * level.r); break;
         case LEVEL_COPY_LEFT_MIDDLE: Render(-2 * level.r, 0); break;
@@ -269,4 +271,60 @@ vector2d Entity::CollisionCenter() {
     double angle = rotation * M_PI / 180;
     return vector2d(collisionCenter.x * cos(angle) - collisionCenter.y * sin(angle),
                     collisionCenter.x * sin(angle) + collisionCenter.y * cos(angle));
+}
+
+Uint8 Entity::VisibleCopy() {
+    double leftEdge   = Camera::camera.LeftEdge(level.r);
+    double rightEdge  = Camera::camera.RightEdge(level.r);
+    double topEdge    = Camera::camera.TopEdge(level.r);
+    double bottomEdge = Camera::camera.BottomEdge(level.r);
+
+    // oś y skierowana w dół
+    if(leftEdge < rightEdge) { // kamera nie jest podzielona w poziomie
+        /* jeżeli encja znajduje się dalej niż pół wyświetlanej grafiki
+         * na lewo od lewej krawędzi kamery to nie jest widoczna
+         */
+        if(location.x + animation.Width() / 2 < leftEdge) {
+            std::cout << "Za bardzo w lewo. (" << location.x << "; " << location.y << "; " << animation.Width() / 2 << ")\n";
+            return LEVEL_COPY_NONE;
+        }
+        // tak samo jeśli znajduje się na prawo od prawej
+        if(location.x - animation.Width() / 2 > rightEdge) {
+            std::cout << "Za bardzo w prawo. (" << location.x << "; " << location.y << "; " << animation.Width() / 2 << ")\n";
+            return LEVEL_COPY_NONE;
+        }
+    } else { // kamera podzielona w poziomie
+        /* jeżeli encja znajduje się pomiędzy prawą i lewą
+         * krawędzią kamery to nie jest widoczna
+         */
+        if(location.x - animation.Width() / 2 > rightEdge &&
+           location.x + animation.Width() / 2 < leftEdge) {
+            return LEVEL_COPY_NONE;
+        }
+    }
+
+    if(topEdge < bottomEdge) { // kamera nie jest podzielona w pionie
+        /* jeżeli encja znajduje się wyżej niż pół wyświetlanej grafiki
+         * od górnej krawędzi kamery to nie jest widoczna
+         */
+        if(location.y + animation.Height() / 2 < topEdge) {
+            std::cout << "Za wysoko. (" << location.x << "; " << location.y << "; " << animation.Height() / 2 << ")\n";
+            return LEVEL_COPY_NONE;
+        }
+        // tak samo jeśli znajduje się poniżej dolnej
+        if(location.y - animation.Height() / 2 > bottomEdge) {
+            std::cout << "Za nisko. (" << location.x << "; " << location.y << "; " << animation.Height() / 2 << ")\n";
+            return LEVEL_COPY_NONE;
+        }
+    } else { // kamera podzielona w pionie
+        /* jeżeli encja znajduje się pomiędzy dolną
+         * i górną krawędzią kamery to nie jest widoczna
+         */
+        if(location.y - animation.Height() / 2 > topEdge &&
+           location.y + animation.Height() / 2 < bottomEdge) {
+            return LEVEL_COPY_NONE;
+        }
+    }
+
+    return LEVEL_COPY_DEFAULT;
 }

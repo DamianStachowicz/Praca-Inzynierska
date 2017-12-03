@@ -19,6 +19,10 @@ class Camera
         void SetSize(Uint32 width, Uint32 height);
         bool Serialize(std::ofstream& file);
         bool Deserialize(std::ifstream& file);
+        double LeftEdge(double levelR);
+        double RightEdge(double levelR);
+        double TopEdge(double levelR);
+        double BottomEdge(double levelR);
 };
 
 #endif // CAMERA_H

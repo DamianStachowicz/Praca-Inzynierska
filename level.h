@@ -7,6 +7,8 @@
 
 // pozycje kopii poziomu do renderowania
 enum {
+    LEVEL_COPY_NONE,
+    LEVEL_COPY_DEFAULT,
     LEVEL_COPY_MIDDLE_BOTTOM,
     LEVEL_COPY_LEFT_BOTTOM,
     LEVEL_COPY_LEFT_MIDDLE,
