@@ -11,10 +11,11 @@ InGameState::InGameState(SDL_Renderer *renderer, Uint32 windowWidth, Uint32 wind
     this->player = player;
 }
 
-void InGameState::Init(SpaceShip* player, Uint32* score) {
+void InGameState::Init(SpaceShip* player, Uint32* score, std::function<void()> ChangeState) {
     keyStates = SDL_GetKeyboardState( NULL );
     this->player = player;
     this->score = score;
+    this->ChangeState = ChangeState;
     // ładowanie fontów
     font = NULL;
     scoreTexture = NULL;
@@ -43,6 +44,9 @@ void InGameState::Init(SpaceShip* player, Uint32* score) {
 }
 
 void InGameState::Loop() {
+    if(player->Health() <= 0 || Entity::level.TimeLeft() <= 0) {
+        ChangeState();
+    }
     while( (SDL_GetTicks() - Entity::timer.lastFrameTime) < (1000 / Entity::timer.GetFPS()) ) {
         // usuwanie martwych obiektów
         for(uint j = 0; j < Entity::entities.size(); j++) {
@@ -88,31 +92,6 @@ void InGameState::Render() {
     for(uint i = 0; i < Entity::entities.size(); i++) {
         Entity* ent = Entity::entities[i];
         ent->RenderCopy(ent->VisibleCopy());
-        //ent->Render();
-
-        // Renderowanie kopii wszystkich encji, w celu zachowania iluzji cykliczności
-        // należy pamiętać o tym, że strzałka y wskazuje w dół
-//        if(player->location.x < 0) {
-//            if(player->location.y > 0) {
-//                ent->RenderCopy(LEVEL_COPY_MIDDLE_BOTTOM);
-//                ent->RenderCopy(LEVEL_COPY_LEFT_BOTTOM);
-//                ent->RenderCopy(LEVEL_COPY_LEFT_MIDDLE);
-//            } else {
-//                ent->RenderCopy(LEVEL_COPY_LEFT_MIDDLE);
-//                ent->RenderCopy(LEVEL_COPY_LEFT_TOP);
-//                ent->RenderCopy(LEVEL_COPY_MIDDLE_TOP);
-//            }
-//        } else {
-//            if(player->location.y > 0) {
-//                ent->RenderCopy(LEVEL_COPY_RIGHT_MIDDLE);
-//                ent->RenderCopy(LEVEL_COPY_RIGHT_BOTTOM);
-//                ent->RenderCopy(LEVEL_COPY_MIDDLE_BOTTOM);
-//            } else {
-//                ent->RenderCopy(LEVEL_COPY_MIDDLE_TOP);
-//                ent->RenderCopy(LEVEL_COPY_RIGHT_TOP);
-//                ent->RenderCopy(LEVEL_COPY_RIGHT_MIDDLE);
-//            }
-//        }
     }
 
     // Rysowanie interfejsu
@@ -158,11 +137,11 @@ void InGameState::HandleKeyDown() {
     } else if( keyStates[ SDL_SCANCODE_W ] ) {
         player->advance = true;
     }
-    if( keyStates[ SDL_SCANCODE_E ] ) {
-        Camera::camera.zoom += 0.01;
-    } else if ( keyStates[ SDL_SCANCODE_Q ] ){
-        Camera::camera.zoom -= 0.01;
-    }
+//    if( keyStates[ SDL_SCANCODE_E ] ) {
+//        Camera::camera.zoom += 0.01;
+//    } else if ( keyStates[ SDL_SCANCODE_Q ] ){
+//        Camera::camera.zoom -= 0.01;
+//    }
 }
 
 void InGameState::HandleKeyUp() {
@@ -196,5 +175,5 @@ void InGameState::HandleMouseMotion(SDL_MouseMotionEvent *event) {
 }
 
 void InGameState::HandleMouseWheelScroll(SDL_MouseWheelEvent *event) {
-    Camera::camera.zoom += (double)event->y / 10;
+    // Camera::camera.zoom += (double)event->y / 10;
 }

@@ -279,52 +279,172 @@ Uint8 Entity::VisibleCopy() {
     double topEdge    = Camera::camera.TopEdge(level.r);
     double bottomEdge = Camera::camera.BottomEdge(level.r);
 
-    // oś y skierowana w dół
-    if(leftEdge < rightEdge) { // kamera nie jest podzielona w poziomie
-        /* jeżeli encja znajduje się dalej niż pół wyświetlanej grafiki
-         * na lewo od lewej krawędzi kamery to nie jest widoczna
-         */
-        if(location.x + animation.Width() / 2 < leftEdge) {
-            std::cout << "Za bardzo w lewo. (" << location.x << "; " << location.y << "; " << animation.Width() / 2 << ")\n";
-            return LEVEL_COPY_NONE;
+    if(leftEdge < rightEdge) {
+        if(topEdge < bottomEdge) {
+            // kamera nie podzielona
+            if(location.x + animation.Width() < leftEdge) {
+                // jeżeli na lewo od lewej krawędzi kamery to encja nie jest widoczna
+                return LEVEL_COPY_NONE;
+            }
+            if(location.x - animation.Width() > rightEdge) {
+                // jeżeli na prawo od lewej krawędzi kamery to encja nie jest widoczna
+                return LEVEL_COPY_NONE;
+            }
+            if(location.y + animation.Height() < topEdge) {
+                // jeżeli powyżej górnej krawędzi to encja nie jest widoczna
+                return LEVEL_COPY_NONE;
+            }
+            if(location.y - animation.Height() > bottomEdge) {
+                // jeżeli poniżej górnej krawędzi to encja nie jest widoczna
+                return LEVEL_COPY_NONE;
+            }
+            return LEVEL_COPY_DEFAULT;
+        } else {
+            // kamera podzielona w pionie
+            // kopia w zależności od położenia
+            if(topEdge <= level.r - Camera::camera.windowHeight / 2) {
+                // środek kamery na dole
+                if(location.y + animation.Height() / 2 >= topEdge) {
+                    return LEVEL_COPY_DEFAULT;
+                }
+                if(location.y - animation.Height() / 2 <= bottomEdge) {
+                    return LEVEL_COPY_MIDDLE_BOTTOM;
+                }
+            } else {
+                // środek kamery na górze
+                if(location.y + animation.Height() / 2 >= topEdge) {
+                    return LEVEL_COPY_MIDDLE_TOP;
+                }
+                if(location.y - animation.Height() / 2 <= bottomEdge) {
+                    return LEVEL_COPY_DEFAULT;
+                }
+            }
         }
-        // tak samo jeśli znajduje się na prawo od prawej
-        if(location.x - animation.Width() / 2 > rightEdge) {
-            std::cout << "Za bardzo w prawo. (" << location.x << "; " << location.y << "; " << animation.Width() / 2 << ")\n";
-            return LEVEL_COPY_NONE;
-        }
-    } else { // kamera podzielona w poziomie
-        /* jeżeli encja znajduje się pomiędzy prawą i lewą
-         * krawędzią kamery to nie jest widoczna
-         */
-        if(location.x - animation.Width() / 2 > rightEdge &&
-           location.x + animation.Width() / 2 < leftEdge) {
-            return LEVEL_COPY_NONE;
+    } else {
+        if(topEdge < bottomEdge) {
+            // kamera podzielona w poziomie
+            // kopia w zależności od położenia
+            if(leftEdge <= level.r - Camera::camera.windowWidth / 2) {
+                // środek kamery po prawej
+                if(location.x + animation.Width() / 2 >= leftEdge) {
+                    return LEVEL_COPY_DEFAULT;
+                }
+                if(location.x - animation.Width() / 2 <= bottomEdge) {
+                    return LEVEL_COPY_RIGHT_MIDDLE;
+                }
+            } else {
+                // środek kamery po lewej
+                if(location.x + animation.Width() / 2 >= leftEdge) {
+                    return LEVEL_COPY_LEFT_MIDDLE;
+                }
+                if(location.x - animation.Width() / 2 <= bottomEdge) {
+                    return LEVEL_COPY_DEFAULT;
+                }
+            }
+        } else {
+            // kamera podzielona na cztery
+            // kopia w zależności od położenia
+            if(rightEdge >= -level.r + Camera::camera.windowWidth / 2 &&
+               bottomEdge >= -level.r + Camera::camera.windowHeight / 2) {
+                // środek kamery w lewym górnym rogu
+                if(location.y - animation.Height() / 2 <= bottomEdge) {
+                    // górne ćwiartki
+                    if(location.x - animation.Width() <= rightEdge) {
+                        // lewa górna ćwiartka
+                        return LEVEL_COPY_DEFAULT;
+                    }
+                    if(location.x + animation.Width() / 2 >= leftEdge) {
+                        // prawa górna ćwiartka
+                        return LEVEL_COPY_LEFT_MIDDLE;
+                    }
+                }
+                if(location.y + animation.Height() / 2 >= topEdge) {
+                    // dolna ćwiartka
+                    if(location.x - animation.Width() <= rightEdge) {
+                        // lewa dolna ćwiartka
+                        return LEVEL_COPY_MIDDLE_TOP;
+                    }
+                    if(location.x + animation.Width() / 2 >= leftEdge) {
+                        // prawa dolna ćwiartka
+                        return LEVEL_COPY_LEFT_TOP;
+                    }
+                }
+            } else if(leftEdge <= level.r - Camera::camera.windowWidth / 2 &&
+                      bottomEdge >= -level.r + Camera::camera.windowHeight / 2) {
+                // środek kamery w prawym górnym rogu
+                if(location.y - animation.Height() / 2 <= bottomEdge) {
+                    // górne ćwiartki
+                    if(location.x - animation.Width() <= rightEdge) {
+                        // lewa górna ćwiartka
+                        return LEVEL_COPY_RIGHT_MIDDLE;
+                    }
+                    if(location.x + animation.Width() / 2 >= leftEdge) {
+                        // prawa górna ćwiartka
+                        return LEVEL_COPY_DEFAULT;
+                    }
+                }
+                if(location.y + animation.Height() / 2 >= topEdge) {
+                    // dolna ćwiartka
+                    if(location.x - animation.Width() <= rightEdge) {
+                        // lewa dolna ćwiartka
+                        return LEVEL_COPY_RIGHT_TOP;
+                    }
+                    if(location.x + animation.Width() / 2 >= leftEdge) {
+                        // prawa dolna ćwiartka
+                        return LEVEL_COPY_MIDDLE_TOP;
+                    }
+                }
+            } else if(leftEdge <= level.r - Camera::camera.windowWidth / 2 &&
+                      topEdge <= level.r - Camera::camera.windowHeight / 2) {
+                // środek kamery w prawym dolnym rogu
+                if(location.y - animation.Height() / 2 <= bottomEdge) {
+                    // górne ćwiartki
+                    if(location.x - animation.Width() <= rightEdge) {
+                        // lewa górna ćwiartka
+                        return LEVEL_COPY_RIGHT_BOTTOM;
+                    }
+                    if(location.x + animation.Width() / 2 >= leftEdge) {
+                        // prawa górna ćwiartka
+                        return LEVEL_COPY_MIDDLE_BOTTOM;
+                    }
+                }
+                if(location.y + animation.Height() / 2 >= topEdge) {
+                    // dolna ćwiartka
+                    if(location.x - animation.Width() <= rightEdge) {
+                        // lewa dolna ćwiartka
+                        return LEVEL_COPY_RIGHT_MIDDLE;
+                    }
+                    if(location.x + animation.Width() / 2 >= leftEdge) {
+                        // prawa dolna ćwiartka
+                        return LEVEL_COPY_DEFAULT;
+                    }
+                }
+            } else {
+                // środek kamery w lewym dolnym rogu
+                if(location.y - animation.Height() / 2 <= bottomEdge) {
+                    // górne ćwiartki
+                    if(location.x - animation.Width() <= rightEdge) {
+                        // lewa górna ćwiartka
+                        return LEVEL_COPY_MIDDLE_BOTTOM;
+                    }
+                    if(location.x + animation.Width() / 2 >= leftEdge) {
+                        // prawa górna ćwiartka
+                        return LEVEL_COPY_LEFT_BOTTOM;
+                    }
+                }
+                if(location.y + animation.Height() / 2 >= topEdge) {
+                    // dolna ćwiartka
+                    if(location.x - animation.Width() <= rightEdge) {
+                        // lewa dolna ćwiartka
+                        return LEVEL_COPY_DEFAULT;
+                    }
+                    if(location.x + animation.Width() / 2 >= leftEdge) {
+                        // prawa dolna ćwiartka
+                        return LEVEL_COPY_LEFT_MIDDLE;
+                    }
+                }
+            }
         }
     }
-
-    if(topEdge < bottomEdge) { // kamera nie jest podzielona w pionie
-        /* jeżeli encja znajduje się wyżej niż pół wyświetlanej grafiki
-         * od górnej krawędzi kamery to nie jest widoczna
-         */
-        if(location.y + animation.Height() / 2 < topEdge) {
-            std::cout << "Za wysoko. (" << location.x << "; " << location.y << "; " << animation.Height() / 2 << ")\n";
-            return LEVEL_COPY_NONE;
-        }
-        // tak samo jeśli znajduje się poniżej dolnej
-        if(location.y - animation.Height() / 2 > bottomEdge) {
-            std::cout << "Za nisko. (" << location.x << "; " << location.y << "; " << animation.Height() / 2 << ")\n";
-            return LEVEL_COPY_NONE;
-        }
-    } else { // kamera podzielona w pionie
-        /* jeżeli encja znajduje się pomiędzy dolną
-         * i górną krawędzią kamery to nie jest widoczna
-         */
-        if(location.y - animation.Height() / 2 > topEdge &&
-           location.y + animation.Height() / 2 < bottomEdge) {
-            return LEVEL_COPY_NONE;
-        }
-    }
-
-    return LEVEL_COPY_DEFAULT;
+    return LEVEL_COPY_NONE;
 }

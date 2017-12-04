@@ -121,7 +121,8 @@ bool Engine::Init() {
                      windowWidth / 2 - 111, 140, NULL);
     menuState.AddButton(btn);
     inGameState = InGameState(renderer, windowWidth, windowHeight);
-    inGameState.Init(player, &score);
+    func = std::bind(&Engine::EndGame, this);
+    inGameState.Init(player, &score, func);
     currentState = &menuState;
 
     return true;
@@ -259,4 +260,8 @@ bool Engine::Deserialize(std::ifstream &file) {
 
 void Engine::StartGame() {
     currentState = &inGameState;
+}
+
+void Engine::EndGame() {
+    currentState = &menuState;
 }

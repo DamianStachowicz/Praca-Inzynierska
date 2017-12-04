@@ -25,6 +25,7 @@ class SpaceShip: public Entity
         bool Serialize(std::ofstream& file);
         bool Deserialize(std::ifstream& file, SDL_Renderer* renderer);
         void DecreaseHealth(double amount);
+        Uint8 VisibleCopy();
 };
 
 #endif // SPACESHIP_H

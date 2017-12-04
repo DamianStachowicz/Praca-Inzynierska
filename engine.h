@@ -44,6 +44,7 @@ class Engine
         State*        currentState;
 
         void StartGame();
+        void EndGame();
 
     public:
         Uint32 score;

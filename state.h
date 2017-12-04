@@ -4,6 +4,7 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <functional>
 #include "texture.h"
 
 class State
@@ -14,11 +15,12 @@ class State
         TTF_Font*     font;
         Uint32        windowWidth;
         Uint32        windowHeight;
+        std::function<void()> ChangeState;
 
     public:
         State();
 
-        virtual void Init();
+        virtual void Init(std::function<void()> ChangeState);
         virtual void Loop();   // główna pętla gry
         virtual void Render(); // funkcja rysująca obiekty na ekranie
         virtual void HandleEvent(SDL_Event* event); // obsługa zdarzeń

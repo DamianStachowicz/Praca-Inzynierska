@@ -1,7 +1,7 @@
 #include "state.h"
 
 State::State() {}
-void State::Init() {}
+void State::Init(std::function<void()> ChangeState) {}
 void State::Loop() {}
 void State::Render() {}
 void State::HandleEvent(SDL_Event *event) {}
