@@ -12,8 +12,8 @@ class Particle : public Entity
         Particle();
         void Loop();
         void Collide();
-        bool Serialize(std::ofstream& file);
-        bool Deserialize(std::ifstream& file, SDL_Renderer* renderer);
+        bool Serialize(tinyxml2::XMLDocument *xmlDoc, tinyxml2::XMLNode *root);
+        bool Deserialize(tinyxml2::XMLElement* root, SDL_Renderer* renderer);
 };
 
 #endif // PARTICLE_H

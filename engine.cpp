@@ -151,31 +151,6 @@ void Engine::Run() {
     }
 }
 
-bool Engine::Serialize(std::ofstream &file) {
-    if(!file.is_open()) {
-        std::cerr << "Błąd podczas próby serializacji silnika. Plik nie jest otwarty do zapisu." << std::endl;
-        return false;
-    }
-
-    file << "<Engine><score>" << score;
-    file << "</score><nrOfEntities>" << Entity::entities.size() << "</nrOfEntities>";
-    for(uint i = 0; i < Entity::entities.size(); i++) {
-        file << "<entityType>" << (Uint16)Entity::entities[i]->type << "</entityType>";
-        if( !Entity::entities[i]->Serialize(file) ) {
-            return false;
-        }
-    }
-    if( !Entity::level.Serialize(file) ) {
-        return false;
-    }
-    if( !Entity::timer.Serialize(file) ) {
-        return false;
-    }
-    file << "</Engine>";
-    return true;
-}
-
-
 bool Engine::Serialize(tinyxml2::XMLDocument *xmlDoc, tinyxml2::XMLNode *root) {
     tinyxml2::XMLElement* element = xmlDoc->NewElement("score");
     element->SetText(score);
@@ -266,6 +241,22 @@ bool Engine::Deserialize(tinyxml2::XMLNode *root) {
             spaceShip->Deserialize(listElement, renderer);
             Entity::entities.push_back(spaceShip);
             player = spaceShip;
+        } else if( std::string(listElement->Name()) == "Particle" ) {
+            Particle* particle = new Particle();
+            particle->Deserialize(listElement, renderer);
+            Entity::entities.push_back(particle);
+        } else if( std::string(listElement->Name()) == "Planet" ) {
+            Planet* planet = new Planet();
+            planet->Deserialize(listElement, renderer);
+            Entity::entities.push_back(planet);
+        } else if( std::string(listElement->Name()) == "Rocket" ) {
+            Rocket* rocket = new Rocket();
+            rocket->Deserialize(listElement, renderer);
+            Entity::entities.push_back(rocket);
+        } else if( std::string(listElement->Name()) == "SellingPoint" ) {
+            SellingPoint* sellingPoint = new SellingPoint(&score);
+            sellingPoint->Deserialize(listElement, renderer);
+            Entity::entities.push_back(sellingPoint);
         } else {
             tmpEntity = new Entity();
             tmpEntity->Deserialize(listElement, renderer);
@@ -274,87 +265,6 @@ bool Engine::Deserialize(tinyxml2::XMLNode *root) {
         listElement = listElement->NextSiblingElement();
     }
 
-    return true;
-}
-
-bool Engine::Deserialize(std::ifstream &file) {
-    if(!file.is_open()) {
-        std::cerr << "Błąd podczas próby deserializacji silnika. Plik nie jest otwarty do odczytu." << std::endl;
-        return false;
-    }
-
-    XMLhelper::SkipTag(file, "<Engine>");
-    score = (Uint32)std::stoul(XMLhelper::GetValue(file, "<score>"));
-    int nrOfEntities = stoi(XMLhelper::GetValue(file, "<nrOfEntities>"));
-    Entity::entities.clear();
-    Uint8 type;
-    for(int i = 0; i < nrOfEntities; i++) {
-        type = (Uint8)std::stoi(XMLhelper::GetValue(file, "<entityType>"));
-        switch(type) {
-            case ENTITY_TYPE_ASTEROID:
-            {
-                Uint8 size = (Uint8)std::stoi(XMLhelper::GetValue(file, "<size>"));
-                Asteroid *tmp;
-                switch(size) {
-                    case ASTEROID_SIZE_BIG: tmp = new AsteroidBig(); break;
-                    case ASTEROID_SIZE_MIDDLE: tmp = new AsteroidMiddle(); break;
-                    case ASTEROID_SIZE_SMALL: tmp = new AsteroidSmall(); break;
-                }
-                Entity::entities.push_back(tmp);
-                tmp->Deserialize(file, renderer);
-                break;
-            }
-            case ENTITY_TYPE_PARTICLE:
-            {
-                Particle* tmp = new Particle();
-                Entity::entities.push_back(tmp);
-                tmp->Deserialize(file, renderer);
-                break;
-            }
-            case ENTITY_TYPE_PLANET:
-            {
-                Planet* tmp = new Planet();
-                Entity::entities.push_back(tmp);
-                tmp->Deserialize(file, renderer);
-                break;
-            }
-            case ENTITY_TYPE_ROCKET:
-            {
-                Rocket* tmp = new Rocket();
-                Entity::entities.push_back(tmp);
-                tmp->Deserialize(file, renderer);
-                break;
-            }
-            case ENTITY_TYPE_SELLING_POINT:
-            {
-                SellingPoint* tmp = new SellingPoint(&score);
-                Entity::entities.push_back(tmp);
-                tmp->Deserialize(file, renderer);
-                break;
-            }
-            case ENTITY_TYPE_SPACESHIP:
-            {
-                SpaceShip* tmp = new SpaceShip();
-                Entity::entities.push_back(tmp);
-                tmp->Deserialize(file, renderer);
-                player = tmp;
-                break;
-            }
-            default:
-            {
-                Entity* tmp = new Entity();
-                Entity::entities.push_back(tmp);
-                tmp->Deserialize(file, renderer);
-                break;
-            }
-        }
-    }
-
-    int playerIdx = std::stoi(XMLhelper::GetValue(file, "<playerIdx>"));
-    player = (SpaceShip*)(Entity::entities[playerIdx]);
-
-    Entity::level.Deserialize(file);
-    Entity::timer.Deserialize(file);
     return true;
 }
 

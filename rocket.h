@@ -18,8 +18,7 @@ class Rocket : public Entity
         void Collide();
         void Explode();
         void Loop();
-        bool Serialize(std::ofstream& file);
-        bool Deserialize(std::ifstream& file, SDL_Renderer* renderer);
+        bool Deserialize(tinyxml2::XMLNode *root, SDL_Renderer *renderer);
 };
 
 #endif // ROCKET_H

@@ -7,8 +7,7 @@ class Planet : public Entity
 {
     public:
         Planet();
-        bool Serialize(std::ofstream& file);
-        bool Deserialize(std::ifstream& file, SDL_Renderer* renderer);
+        bool Deserialize(tinyxml2::XMLNode *root, SDL_Renderer *renderer);
 };
 
 #endif // PLANET_H

@@ -12,8 +12,7 @@ class SellingPoint : public Entity
         SellingPoint(Uint32* score);
         void UpdateForce();
         void Collide();
-        bool Serialize(std::ofstream& file);
-        bool Deserialize(std::ifstream& file, SDL_Renderer* renderer);
+        bool Deserialize(tinyxml2::XMLNode *root, SDL_Renderer *renderer);
 };
 
 #endif // SELLINGPOINT_H
