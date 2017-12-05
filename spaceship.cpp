@@ -135,6 +135,10 @@ bool SpaceShip::Deserialize(std::ifstream &file, SDL_Renderer* renderer) {
     return true;
 }
 
+bool SpaceShip::Deserialize(tinyxml2::XMLElement *root, SDL_Renderer *renderer) {
+    return Entity::Deserialize(root, renderer);;
+}
+
 Uint8 SpaceShip::VisibleCopy() {
     return LEVEL_COPY_DEFAULT;
 }

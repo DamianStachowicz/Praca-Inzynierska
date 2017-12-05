@@ -3,6 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <sstream>
+#include <tinyxml2.h>
 #include "xmlhelper.h"
 
 // pozycje kopii poziomu do renderowania
@@ -34,6 +35,8 @@ class Level
         std::string TimeLeftString();
         bool Serialize(std::ofstream& file);
         bool Deserialize(std::ifstream& file);
+        bool Serialize(tinyxml2::XMLDocument* xmlDoc, tinyxml2::XMLNode* root);
+        bool Deserialize(tinyxml2::XMLNode* root);
 };
 
 #endif // LEVEL_H

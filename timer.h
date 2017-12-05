@@ -2,6 +2,7 @@
 #define TIMER_H
 
 #include <SDL2/SDL.h>
+#include <tinyxml2.h>
 #include "xmlhelper.h"
 
 // Zarządza krokiem czasowym symulacji oraz liczbą klatek na sekundę
@@ -26,6 +27,8 @@ class Timer
         void UpdateLastFrameTime();
         bool Serialize(std::ofstream& file);
         bool Deserialize(std::ifstream& file);
+        bool Serialize(tinyxml2::XMLDocument* xmlDoc, tinyxml2::XMLNode* root);
+        bool Deserialize(tinyxml2::XMLNode* root);
 };
 
 #endif // TIMER_H

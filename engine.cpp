@@ -97,12 +97,10 @@ bool Engine::Init() {
     // Ustawianie koloru tła
     SDL_SetRenderDrawColor( renderer, 0x00, 0x00, 0x00, 0xFF );
 
-    std::ifstream ifile;
-    //ifile.open("Test-2-asteroids.xml");
-    ifile.open("test1.xml");
-    //ifile.open("planet.xml");
-    Deserialize(ifile);
-    ifile.close();
+    tinyxml2::XMLDocument xmlDoc;
+    xmlDoc.LoadFile("serializationTest.xml");
+    tinyxml2::XMLNode* root = xmlDoc.FirstChild();
+    Deserialize(root);
 
     // Inicjalizacja stanów gry
     Texture* menuBg = new Texture(renderer, "gfx/darkPurple.png");
@@ -174,6 +172,108 @@ bool Engine::Serialize(std::ofstream &file) {
         return false;
     }
     file << "</Engine>";
+    return true;
+}
+
+
+bool Engine::Serialize(tinyxml2::XMLDocument *xmlDoc, tinyxml2::XMLNode *root) {
+    tinyxml2::XMLElement* element = xmlDoc->NewElement("score");
+    element->SetText(score);
+    root->InsertEndChild(element);
+    element = xmlDoc->NewElement("entities");
+    tinyxml2::XMLElement* subelement;
+    std::string entityType;
+    for(uint i = 0; i < Entity::entities.size(); i++) {
+        switch(Entity::entities[i]->type) {
+            case ENTITY_TYPE_ASTEROID: entityType = "Asteroid"; break;
+            case ENTITY_TYPE_PARTICLE: entityType = "Particle"; break;
+            case ENTITY_TYPE_PLANET: entityType = "Planet"; break;
+            case ENTITY_TYPE_ROCKET: entityType = "Rocket"; break;
+            case ENTITY_TYPE_SELLING_POINT: entityType = "SellingPoint"; break;
+        case ENTITY_TYPE_SPACESHIP: entityType = "SpaceShip"; break;
+            default: entityType = "Default";
+        }
+        subelement = xmlDoc->NewElement(entityType.c_str());
+        if( !Entity::entities[i]->Serialize(xmlDoc, subelement) ) {
+            return false;
+        }
+        element->InsertEndChild(subelement);
+    }
+    root->InsertEndChild(element);
+    element = xmlDoc->NewElement("level");
+    if( !Entity::level.Serialize(xmlDoc, element) ) {
+        return false;
+    }
+    root->InsertEndChild(element);
+    element = xmlDoc->NewElement("timer");
+    if( !Entity::timer.Serialize(xmlDoc, element) ) {
+        return false;
+    }
+    root->InsertEndChild(element);
+    return true;
+}
+
+bool Engine::Deserialize(tinyxml2::XMLNode *root) {
+    tinyxml2::XMLElement* element = root->FirstChildElement("score");
+    if( element == NULL ) {
+        return false;
+    }
+    element->QueryUnsignedText(&score);
+    element = root->FirstChildElement("level");
+    if( !Entity::level.Deserialize(element) ) {
+        return false;
+    }
+    element = root->FirstChildElement("timer");
+    if( !Entity::timer.Deserialize(element) ) {
+        return false;
+    }
+    element = root->FirstChildElement("entities");
+    tinyxml2::XMLElement* listElement = element->FirstChildElement();
+    Uint32 tmp;
+    Entity* tmpEntity;
+    while(listElement != NULL) {
+        if( std::string(listElement->Name()) == "Asteroid" ) {
+            listElement->FirstChildElement("size")->QueryUnsignedText(&tmp);
+            Asteroid* asteroid;
+            switch(tmp) {
+                case ASTEROID_SIZE_BIG: {
+                    asteroid = new AsteroidBig();
+                    asteroid->Deserialize(listElement, renderer);
+                    Entity::entities.push_back(asteroid);
+                    break;
+                }
+                case ASTEROID_SIZE_MIDDLE: {
+                    asteroid = new AsteroidMiddle();
+                    asteroid->Deserialize(listElement, renderer);
+                    Entity::entities.push_back(asteroid);
+                    break;
+                }
+                case ASTEROID_SIZE_SMALL:  {
+                    asteroid = new AsteroidSmall();
+                    asteroid->Deserialize(listElement, renderer);
+                    Entity::entities.push_back(asteroid);
+                    break;
+                }
+                default:  {
+                    asteroid = new Asteroid();
+                    asteroid->Deserialize(listElement, renderer);
+                    Entity::entities.push_back(asteroid);
+                    break;
+                }
+            }
+        } else if( std::string(listElement->Name()) == "SpaceShip" ) {
+            SpaceShip* spaceShip = new SpaceShip();
+            spaceShip->Deserialize(listElement, renderer);
+            Entity::entities.push_back(spaceShip);
+            player = spaceShip;
+        } else {
+            tmpEntity = new Entity();
+            tmpEntity->Deserialize(listElement, renderer);
+            Entity::entities.push_back(tmpEntity);
+        }
+        listElement = listElement->NextSiblingElement();
+    }
+
     return true;
 }
 

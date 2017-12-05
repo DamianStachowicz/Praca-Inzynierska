@@ -28,7 +28,7 @@ SOURCES += main.cpp \
     ingamestate.cpp \
     menustate.cpp
 
-LIBS += -lSDL2 -lSDL2_image -lSDL2_ttf
+LIBS += -lSDL2 -lSDL2_image -lSDL2_ttf -ltinyxml2
 
 HEADERS += \
     engine.h \

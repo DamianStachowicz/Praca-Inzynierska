@@ -57,6 +57,42 @@ bool Timer::Serialize(std::ofstream &file) {
     return true;
 }
 
+bool Timer::Serialize(tinyxml2::XMLDocument *xmlDoc, tinyxml2::XMLNode *root) {
+    tinyxml2::XMLElement* element = xmlDoc->NewElement("FPS");
+    element->SetText(FPS);
+    root->InsertEndChild(element);
+
+    element = xmlDoc->NewElement("dt");
+    element->SetText(dt);
+    root->InsertEndChild(element);
+
+    element = xmlDoc->NewElement("currentTime");
+    element->SetText(currentTime);
+    root->InsertEndChild(element);
+
+    element = xmlDoc->NewElement("stepsPerFrame");
+    element->SetText(stepsPerFrame);
+    root->InsertEndChild(element);
+
+    return true;
+}
+
+bool Timer::Deserialize(tinyxml2::XMLNode *root) {
+    tinyxml2::XMLElement* element = root->FirstChildElement("FPS");
+    Uint32 tmp;
+    element->QueryUnsignedText(&tmp);
+    FPS = tmp;
+    element = root->FirstChildElement("dt");
+    element->QueryUnsignedText(&tmp);
+    dt = tmp;
+    element = root->FirstChildElement("currentTime");
+    element->QueryUnsignedText(&currentTime);
+    element = root->FirstChildElement("stepsPerFrame");
+    element->QueryUnsignedText(&tmp);
+    stepsPerFrame = tmp;
+    return true;
+}
+
 bool Timer::Deserialize(std::ifstream &file) {
     if(!file.is_open()) {
         std::cerr << "Błąd podczas próby deserializacji stopera. Plik nie jest otwarty do odczytu." << std::endl;

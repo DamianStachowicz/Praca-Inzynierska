@@ -233,6 +233,148 @@ bool Entity::Serialize(std::ofstream& file) {
     return true;
 }
 
+bool Entity::Serialize(tinyxml2::XMLDocument *xmlDoc, tinyxml2::XMLNode *root) {
+    tinyxml2::XMLElement* subelement = xmlDoc->NewElement("r");
+    subelement->SetText(r);
+    root->InsertEndChild(subelement);
+
+    subelement = xmlDoc->NewElement("velocity");
+    tinyxml2::XMLElement* subsubelement = xmlDoc->NewElement("x");
+    subsubelement->SetText(velocity.x);
+    subelement->InsertEndChild(subsubelement);
+    subsubelement = xmlDoc->NewElement("y");
+    subsubelement->SetText(velocity.y);
+    subelement->InsertEndChild(subsubelement);
+    root->InsertEndChild(subelement);
+
+    subelement = xmlDoc->NewElement("acceleration");
+    subsubelement = xmlDoc->NewElement("x");
+    subsubelement->SetText(acceleration.x);
+    subelement->InsertEndChild(subsubelement);
+    subsubelement = xmlDoc->NewElement("y");
+    subsubelement->SetText(acceleration.y);
+    subelement->InsertEndChild(subsubelement);
+    root->InsertEndChild(subelement);
+
+    subelement = xmlDoc->NewElement("force");
+    subsubelement = xmlDoc->NewElement("x");
+    subsubelement->SetText(force.x);
+    subelement->InsertEndChild(subsubelement);
+    subsubelement = xmlDoc->NewElement("y");
+    subsubelement->SetText(force.y);
+    subelement->InsertEndChild(subsubelement);
+    root->InsertEndChild(subelement);
+
+    subelement = xmlDoc->NewElement("texture");
+    subelement->SetText(texture->path.c_str());
+    root->InsertEndChild(subelement);
+
+    subelement = xmlDoc->NewElement("deathAnimationStarted");
+    subelement->SetText(deathAnimationStarted);
+    root->InsertEndChild(subelement);
+
+    subelement = xmlDoc->NewElement("alive");
+    subelement->SetText(alive);
+    root->InsertEndChild(subelement);
+
+    subelement = xmlDoc->NewElement("location");
+    subsubelement = xmlDoc->NewElement("x");
+    subsubelement->SetText(location.x);
+    subelement->InsertEndChild(subsubelement);
+    subsubelement = xmlDoc->NewElement("y");
+    subsubelement->SetText(location.y);
+    subelement->InsertEndChild(subsubelement);
+    root->InsertEndChild(subelement);
+
+    subelement = xmlDoc->NewElement("rotation");
+    subelement->SetText(rotation);
+    root->InsertEndChild(subelement);
+
+    subelement = xmlDoc->NewElement("type");
+    subelement->SetText(type);
+    root->InsertEndChild(subelement);
+
+    subelement = xmlDoc->NewElement("mass");
+    subelement->SetText(mass);
+    root->InsertEndChild(subelement);
+
+    subelement = xmlDoc->NewElement("collisionCenter");
+    subsubelement = xmlDoc->NewElement("x");
+    subsubelement->SetText(collisionCenter.x);
+    subelement->InsertEndChild(subsubelement);
+    subsubelement = xmlDoc->NewElement("y");
+    subsubelement->SetText(collisionCenter.y);
+    subelement->InsertEndChild(subsubelement);
+    root->InsertEndChild(subelement);
+
+    subelement = xmlDoc->NewElement("animation");
+    animation.Serialize(xmlDoc, subelement);
+    root->InsertEndChild(subelement);
+
+    return true;
+}
+
+bool Entity::Deserialize(tinyxml2::XMLNode *root, SDL_Renderer *renderer) {
+    tinyxml2::XMLElement* element = root->FirstChildElement("r");
+    element->QueryDoubleText(&r);
+
+    element = root->FirstChildElement("velocity");
+    tinyxml2::XMLElement* subelement = element->FirstChildElement("x");
+    subelement->QueryDoubleText(&velocity.x);
+    subelement = element->FirstChildElement("y");
+    subelement->QueryDoubleText(&velocity.y);
+
+    element = root->FirstChildElement("acceleration");
+    subelement = element->FirstChildElement("x");
+    subelement->QueryDoubleText(&acceleration.x);
+    subelement = element->FirstChildElement("y");
+    subelement->QueryDoubleText(&acceleration.y);
+
+    element = root->FirstChildElement("force");
+    subelement = element->FirstChildElement("x");
+    subelement->QueryDoubleText(&force.x);
+    subelement = element->FirstChildElement("y");
+    subelement->QueryDoubleText(&force.y);
+
+    element = root->FirstChildElement("texture");
+    std::string path = element->GetText();
+    texture = new Texture(renderer, path);
+
+    element = root->FirstChildElement("deathAnimationStarted");
+    element->QueryUnsignedText(&deathAnimationStarted);
+
+    element = root->FirstChildElement("alive");
+    element->QueryBoolText(&alive);
+
+    element = root->FirstChildElement("location");
+    subelement = element->FirstChildElement("x");
+    subelement->QueryDoubleText(&location.x);
+    subelement = element->FirstChildElement("y");
+    subelement->QueryDoubleText(&location.y);
+
+    element = root->FirstChildElement("rotation");
+    element->QueryDoubleText(&rotation);
+
+    Uint32 tmp;
+    element = root->FirstChildElement("type");
+    element->QueryUnsignedText(&tmp);
+    type = tmp;
+
+    element = root->FirstChildElement("mass");
+    element->QueryDoubleText(&mass);
+
+    element = root->FirstChildElement("collisionCenter");
+    subelement = element->FirstChildElement("x");
+    subelement->QueryDoubleText(&collisionCenter.x);
+    subelement = element->FirstChildElement("y");
+    subelement->QueryDoubleText(&collisionCenter.y);
+
+    element = root->FirstChildElement("animation");
+    animation.Deserialize(element);
+
+    return true;
+}
+
 bool Entity::Deserialize(std::ifstream& file, SDL_Renderer* renderer) {
     if(!file.is_open()) {
         std::cerr << "Błąd podczas próby deserializacji obiektu. Plik nie jest otwarty do odczytu." << std::endl;

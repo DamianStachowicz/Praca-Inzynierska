@@ -7,6 +7,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
+#include <tinyxml2.h>
 #include "texture.h"
 #include "vector2d.h"
 #include "camera.h"
@@ -84,6 +85,8 @@ class Entity
         double GetMinimapR(double ratio);
         virtual bool Serialize(std::ofstream& file);
         virtual bool Deserialize(std::ifstream& file, SDL_Renderer* renderer);
+        virtual bool Serialize(tinyxml2::XMLDocument* xmlDoc, tinyxml2::XMLNode* root);
+        virtual bool Deserialize(tinyxml2::XMLNode *root, SDL_Renderer* renderer);
         vector2d CollisionCenter();
         Uint8 VisibleCopy();
 };

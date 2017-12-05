@@ -45,6 +45,55 @@ bool Animation::Serialize(std::ofstream &file) {
     return true;
 }
 
+bool Animation::Serialize(tinyxml2::XMLDocument *xmlDoc, tinyxml2::XMLNode *root) {
+    tinyxml2::XMLElement* element = xmlDoc->NewElement("currentFrame");
+    element->SetText(currentFrame);
+    root->InsertEndChild(element);
+
+    element = xmlDoc->NewElement("numberOfFrames");
+    element->SetText(numberOfFrames);
+    root->InsertEndChild(element);
+
+    element = xmlDoc->NewElement("timeBetweenFrames");
+    element->SetText(timeBetweenFrames);
+    root->InsertEndChild(element);
+
+    element = xmlDoc->NewElement("lastFrameTime");
+    element->SetText(lastFrameTime);
+    root->InsertEndChild(element);
+
+    element = xmlDoc->NewElement("width");
+    element->SetText(width);
+    root->InsertEndChild(element);
+
+    element = xmlDoc->NewElement("height");
+    element->SetText(height);
+    root->InsertEndChild(element);
+}
+
+bool Animation::Deserialize(tinyxml2::XMLNode *root) {
+    tinyxml2::XMLElement* element = root->FirstChildElement("currentFrame");
+    Uint32 tmp;
+    element->QueryUnsignedText(&tmp);
+    currentFrame = tmp;
+
+    element = root->FirstChildElement("numberOfFrames");
+    element->QueryUnsignedText(&tmp);
+    numberOfFrames = tmp;
+
+    element = root->FirstChildElement("timeBetweenFrames");
+    element->QueryUnsignedText(&timeBetweenFrames);
+
+    element = root->FirstChildElement("lastFrameTime");
+    element->QueryUnsignedText(&lastFrameTime);
+
+    element = root->FirstChildElement("width");
+    element->QueryUnsignedText(&width);
+
+    element = root->FirstChildElement("height");
+    element->QueryUnsignedText(&height);
+}
+
 bool Animation::Deserialize(std::ifstream &file) {
     if(!file.is_open()) {
         std::cerr << "Błąd podczas próby deserializacji obiektu. Plik nie jest otwarty do odczytu." << std::endl;

@@ -55,6 +55,8 @@ class Engine
         void Run();  // funkcja uruchamiająca grę
         bool Serialize(std::ofstream& file);
         bool Deserialize(std::ifstream& file);
+        bool Serialize(tinyxml2::XMLDocument* xmlDoc, tinyxml2::XMLNode* root);
+        bool Deserialize(tinyxml2::XMLNode* root);
 };
 
 #endif // ENGINE_H

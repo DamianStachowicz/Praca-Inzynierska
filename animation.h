@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include <fstream>
 #include <iostream>
+#include <tinyxml2.h>
 #include "xmlhelper.h"
 
 class Animation
@@ -25,6 +26,8 @@ class Animation
         Uint8 CurrentFrame();
         bool Serialize(std::ofstream& file);
         bool Deserialize(std::ifstream& file);
+        bool Serialize(tinyxml2::XMLDocument *xmlDoc, tinyxml2::XMLNode *root);
+        bool Deserialize(tinyxml2::XMLNode* root);
 };
 
 #endif // ANIMATION_H

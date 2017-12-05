@@ -24,6 +24,7 @@ class SpaceShip: public Entity
         Sint8 Health();
         bool Serialize(std::ofstream& file);
         bool Deserialize(std::ifstream& file, SDL_Renderer* renderer);
+        bool Deserialize(tinyxml2::XMLElement* root, SDL_Renderer* renderer);
         void DecreaseHealth(double amount);
         Uint8 VisibleCopy();
 };

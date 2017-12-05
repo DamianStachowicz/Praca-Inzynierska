@@ -44,6 +44,32 @@ bool Level::Serialize(std::ofstream &file) {
     return true;
 }
 
+bool Level::Serialize(tinyxml2::XMLDocument *xmlDoc, tinyxml2::XMLNode *root) {
+    tinyxml2::XMLElement* element = xmlDoc->NewElement("startTime");
+    element->SetText(startTime);
+    root->InsertEndChild(element);
+
+    element = xmlDoc->NewElement("timeLimit");
+    element->SetText(timeLimit);
+    root->InsertEndChild(element);
+
+    element = xmlDoc->NewElement("r");
+    element->SetText(r);
+    root->InsertEndChild(element);
+
+    return true;
+}
+
+bool Level::Deserialize(tinyxml2::XMLNode *root) {
+    tinyxml2::XMLElement* element = root->FirstChildElement("startTime");
+    element->QueryUnsignedText(&startTime);
+    element = root->FirstChildElement("timeLimit");
+    element->QueryUnsignedText(&timeLimit);
+    element = root->FirstChildElement("r");
+    element->QueryDoubleText(&r);
+    return true;
+}
+
 bool Level::Deserialize(std::ifstream &file) {
     if(!file.is_open()) {
         std::cerr << "Błąd podczas próby deserializacji poziomu. Plik nie jest otwarty do odczytu." << std::endl;

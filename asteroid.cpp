@@ -80,3 +80,7 @@ bool Asteroid::Deserialize(std::ifstream &file, SDL_Renderer* renderer) {
     XMLhelper::SkipTag(file, "</Asteroid>");
     return true;
 }
+
+bool Asteroid::Deserialize(tinyxml2::XMLNode *root, SDL_Renderer *renderer) {
+    return Entity::Deserialize(root, renderer);
+}
