@@ -33,10 +33,9 @@ class Level
         Level(double r, Uint32 timeLimit);
         Uint32 TimeLeft();
         std::string TimeLeftString();
-        bool Serialize(std::ofstream& file);
-        bool Deserialize(std::ifstream& file);
         bool Serialize(tinyxml2::XMLDocument* xmlDoc, tinyxml2::XMLNode* root);
         bool Deserialize(tinyxml2::XMLNode* root);
+        void Reset();
 };
 
 #endif // LEVEL_H

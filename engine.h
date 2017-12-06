@@ -20,6 +20,7 @@
 #include "sellingpoint.h"
 #include "ingamestate.h"
 #include "menustate.h"
+#include "lvlpickstate.h"
 
 /** @class Engine
  *  @brief Silnik gry
@@ -27,6 +28,7 @@
 class Engine
 {
     private:
+        bool          quit;
         SDL_Window*   window;
         SDL_Renderer* renderer;
         Uint32        windowWidth;
@@ -41,10 +43,16 @@ class Engine
         SDL_Color     timerColor;
         InGameState   inGameState;
         MenuState     menuState;
+        LvlPickState  lvlPickState;
         State*        currentState;
 
+        // przełączanie stanów
         void StartGame();
         void EndGame();
+        void LoadLevel();
+        void LevelPick();
+        void EndProgram();
+        void Return2Menu();
 
     public:
         Uint32 score;

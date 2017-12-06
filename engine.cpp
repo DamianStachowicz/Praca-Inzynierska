@@ -97,11 +97,6 @@ bool Engine::Init() {
     // Ustawianie koloru tła
     SDL_SetRenderDrawColor( renderer, 0x00, 0x00, 0x00, 0xFF );
 
-    tinyxml2::XMLDocument xmlDoc;
-    xmlDoc.LoadFile("serializationTest.xml");
-    tinyxml2::XMLNode* root = xmlDoc.FirstChild();
-    Deserialize(root);
-
     // Inicjalizacja stanów gry
     Texture* menuBg = new Texture(renderer, "gfx/darkPurple.png");
     menuState = MenuState(renderer, windowWidth, windowHeight, menuBg);
@@ -112,15 +107,24 @@ bool Engine::Init() {
                              windowWidth / 2 - 111, 20, func);
     btn->Switch();
     menuState.AddButton(btn);
+    func = std::bind(&Engine::LevelPick, this);
     btn = new Button(renderer, defaultBtn, selectedBtn, TTF_OpenFont( "ttf/kenvector_future.ttf", 20 ), "Wybierz poziom", {0x0, 0x0, 0x0, 0xFF},
-                     windowWidth / 2 - 111, 80, NULL);
+                     windowWidth / 2 - 111, 80, func);
     menuState.AddButton(btn);
+    func = std::bind(&Engine::EndProgram, this);
     btn = new Button(renderer, defaultBtn, selectedBtn, font, "Wyjdz", {0x0, 0x0, 0x0, 0xFF},
-                     windowWidth / 2 - 111, 140, NULL);
+                     windowWidth / 2 - 111, 140, func);
     menuState.AddButton(btn);
+
     inGameState = InGameState(renderer, windowWidth, windowHeight);
     func = std::bind(&Engine::EndGame, this);
     inGameState.Init(player, &score, func);
+
+    lvlPickState = LvlPickState(renderer, windowWidth, windowHeight, menuBg);
+    func = std::bind(&Engine::LoadLevel, this);
+    std::function<void()> func2 = std::bind(&Engine::Return2Menu, this);
+    lvlPickState.Init(func, func2);
+
     currentState = &menuState;
 
     return true;
@@ -130,7 +134,7 @@ bool Engine::Init() {
  */
 void Engine::Run() {
     SDL_Event event;
-    bool quit = false;
+    quit = false;
 
     // program pozostaje uruchomiony dopóki użytkownik nie zarząda zakończenia
     while( !quit )
@@ -269,9 +273,34 @@ bool Engine::Deserialize(tinyxml2::XMLNode *root) {
 }
 
 void Engine::StartGame() {
+    Entity::level.Reset();
     currentState = &inGameState;
 }
 
 void Engine::EndGame() {
+    currentState = &menuState;
+}
+
+void Engine::LoadLevel() {
+    tinyxml2::XMLDocument xmlDoc;
+    std::string filename = lvlPickState.Filename();
+    if(filename == "zablokowany") {
+        return;
+    }
+    xmlDoc.LoadFile(filename.c_str());
+    tinyxml2::XMLNode* root = xmlDoc.FirstChild();
+    Deserialize(root);
+    currentState = &inGameState;
+}
+
+void Engine::LevelPick() {
+    currentState = &lvlPickState;
+}
+
+void Engine::EndProgram() {
+    quit = true;
+}
+
+void Engine::Return2Menu() {
     currentState = &menuState;
 }

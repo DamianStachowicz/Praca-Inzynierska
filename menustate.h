@@ -8,7 +8,7 @@
 
 class MenuState : public State
 {
-    private:
+    protected:
         std::vector<Button*> buttons;
         Uint16 currentBtnIdx;
         Texture* background;

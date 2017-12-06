@@ -32,18 +32,6 @@ std::string Level::TimeLeftString() {
     return os.str();
 }
 
-bool Level::Serialize(std::ofstream &file) {
-    if(!file.is_open()) {
-        std::cerr << "Błąd podczas próby serializacji poziomu. Plik nie jest otwarty do zapisu." << std::endl;
-        return false;
-    }
-    file << "<Level><startTime>" << startTime;
-    file << "</startTime><timeLimit>" << timeLimit;
-    file << "</timeLimit><r>" << r;
-    file << "</r></Level>";
-    return true;
-}
-
 bool Level::Serialize(tinyxml2::XMLDocument *xmlDoc, tinyxml2::XMLNode *root) {
     tinyxml2::XMLElement* element = xmlDoc->NewElement("startTime");
     element->SetText(startTime);
@@ -70,15 +58,6 @@ bool Level::Deserialize(tinyxml2::XMLNode *root) {
     return true;
 }
 
-bool Level::Deserialize(std::ifstream &file) {
-    if(!file.is_open()) {
-        std::cerr << "Błąd podczas próby deserializacji poziomu. Plik nie jest otwarty do odczytu." << std::endl;
-        return false;
-    }
-    XMLhelper::SkipTag(file, "<Level>");
-    startTime = std::stoul(XMLhelper::GetValue(file, "<startTime>"));
-    timeLimit = std::stoul(XMLhelper::GetValue(file, "<timeLimit>"));
-    r = std::stod(XMLhelper::GetValue(file, "<r>"));
-    XMLhelper::SkipTag(file, "</Level>");
-    return true;
+void Level::Reset() {
+    startTime = SDL_GetTicks();
 }

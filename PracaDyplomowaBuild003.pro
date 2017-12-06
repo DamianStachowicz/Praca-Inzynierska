@@ -26,7 +26,8 @@ SOURCES += main.cpp \
     button.cpp \
     state.cpp \
     ingamestate.cpp \
-    menustate.cpp
+    menustate.cpp \
+    lvlpickstate.cpp
 
 LIBS += -lSDL2 -lSDL2_image -lSDL2_ttf -ltinyxml2
 
@@ -53,4 +54,5 @@ HEADERS += \
     button.h \
     state.h \
     ingamestate.h \
-    menustate.h
+    menustate.h \
+    lvlpickstate.h
