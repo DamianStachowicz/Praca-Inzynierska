@@ -96,7 +96,7 @@ void InGameState::Render() {
 
     // Rysowanie interfejsu
     scoreBg->Render(0, 0, 10, 10, 0);
-    scoreTexture->Render(0, 0, 15, 11, 0);
+    scoreTexture->Render(0, 0, scoreBg->Width() - scoreTexture->Width(), 11, 0);
     timerTexture->Render(0, 0, windowWidth / 2 - 10, 10, 0);
 
     // Rysowanie wyrenderowanej klatki
