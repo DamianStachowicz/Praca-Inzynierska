@@ -22,8 +22,9 @@ void LvlPickState::Init(std::function<void()> ChangeState, std::function<void()>
     std::string filename;
     bool unlocked;
     while(element != NULL) {
-        subelement = element->FirstChildElement();
+        subelement = element->FirstChildElement("fileName");
         filename = subelement->GetText();
+        subelement = element->FirstChildElement("unlocked");
         subelement->QueryBoolText(&unlocked);
         levels[filename] = unlocked;
         element = element->NextSiblingElement();
@@ -41,7 +42,7 @@ void LvlPickState::Init(std::function<void()> ChangeState, std::function<void()>
             btn = new Button(renderer, defaultBtn, selectedBtn, TTF_OpenFont( "ttf/kenvector_future.ttf", 40 ),
                              std::to_string(i), {0x0, 0x0, 0x0, 0xFF}, windowWidth / 2 - 111, 20 + 60 * (i - 1), ChangeState);
         } else {
-            btn = new Button(renderer, defaultBtn, selectedBtn, TTF_OpenFont( "ttf/kenvector_future.ttf", 40 ),
+            btn = new Button(renderer, defaultBtn, selectedBtn, TTF_OpenFont( "ttf/kenvector_future.ttf", 20 ),
                              "zablokowany", {0x0, 0x0, 0x0, 0xFF}, windowWidth / 2 - 111, 20 + 60 * (i - 1), ChangeState);
         }
         AddButton(btn);

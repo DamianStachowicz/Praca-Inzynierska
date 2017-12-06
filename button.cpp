@@ -20,7 +20,9 @@ void Button::Render() {
     } else {
         defaultBg->Render(0, 0, x, y, 0);
     }
-    textTexture->Render(0, 0, x + defaultBg->Width() / 2 - textTexture->Width() / 2, y, 0);
+    textTexture->Render(0, 0,
+                        x + defaultBg->Width() / 2 - textTexture->Width() / 2,
+                        y + defaultBg->Height() /2 - textTexture->Height() / 2, 0);
 }
 
 void Button::Switch() {
