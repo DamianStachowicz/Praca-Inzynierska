@@ -45,6 +45,7 @@ class Engine
         MenuState     menuState;
         LvlPickState  lvlPickState;
         State*        currentState;
+        Uint32        asteroidsMass;
 
         // przełączanie stanów
         void StartGame();
@@ -63,6 +64,7 @@ class Engine
         void Run();  // funkcja uruchamiająca grę
         bool Serialize(tinyxml2::XMLDocument* xmlDoc, tinyxml2::XMLNode* root);
         bool Deserialize(tinyxml2::XMLNode* root);
+        void Clear();
 };
 
 #endif // ENGINE_H

@@ -194,6 +194,7 @@ bool Engine::Serialize(tinyxml2::XMLDocument *xmlDoc, tinyxml2::XMLNode *root) {
 }
 
 bool Engine::Deserialize(tinyxml2::XMLNode *root) {
+    Clear();
     tinyxml2::XMLElement* element = root->FirstChildElement("score");
     if( element == NULL ) {
         return false;
@@ -241,6 +242,7 @@ bool Engine::Deserialize(tinyxml2::XMLNode *root) {
                     break;
                 }
             }
+            asteroidsMass += asteroid->mass;
         } else if( std::string(listElement->Name()) == "SpaceShip" ) {
             SpaceShip* spaceShip = new SpaceShip();
             spaceShip->Deserialize(listElement, renderer);
@@ -270,6 +272,7 @@ bool Engine::Deserialize(tinyxml2::XMLNode *root) {
         listElement = listElement->NextSiblingElement();
     }
 
+    Entity::level.Reset();
     return true;
 }
 
@@ -280,8 +283,8 @@ void Engine::StartGame() {
     tinyxml2::XMLNode* root = xmlDoc.FirstChild();
     Deserialize(root);
 
-    Entity::level.Reset();
     inGameState.SetPlayer(player);
+    inGameState.SetAsteroidsMass(asteroidsMass);
     currentState = &inGameState;
 }
 
@@ -298,6 +301,9 @@ void Engine::LoadLevel() {
     xmlDoc.LoadFile(("lvl/" + filename).c_str());
     tinyxml2::XMLNode* root = xmlDoc.FirstChild();
     Deserialize(root);
+
+    inGameState.SetPlayer(player);
+    inGameState.SetAsteroidsMass(asteroidsMass);
     currentState = &inGameState;
 }
 
@@ -311,4 +317,11 @@ void Engine::EndProgram() {
 
 void Engine::Return2Menu() {
     currentState = &menuState;
+}
+
+void Engine::Clear() {
+    delete(player);
+    score = 0;
+    Entity::entities.clear();
+    asteroidsMass = 0;
 }

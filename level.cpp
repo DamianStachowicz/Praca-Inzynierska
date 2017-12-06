@@ -4,19 +4,19 @@ Level::Level()
 {
     this->r = 1500;
     this->timeLimit = 60000;
-    startTime = SDL_GetTicks();
+    this->startTime = SDL_GetTicks();
 }
 
 Level::Level(double r) {
     this->r = r;
     this->timeLimit = 60000;
-    startTime = SDL_GetTicks();
+    this->startTime = SDL_GetTicks();
 }
 
 Level::Level(double r, Uint32 timeLimit) {
     this->r = r;
     this->timeLimit = timeLimit;
-    startTime = SDL_GetTicks();
+    this->startTime = SDL_GetTicks();
 }
 
 Uint32 Level::TimeLeft() {
@@ -59,5 +59,5 @@ bool Level::Deserialize(tinyxml2::XMLNode *root) {
 }
 
 void Level::Reset() {
-    startTime = SDL_GetTicks();
+    this->startTime = SDL_GetTicks();
 }

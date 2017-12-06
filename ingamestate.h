@@ -3,6 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL2_gfxPrimitives.h>
 #include "state.h"
 #include "texture.h"
 #include "spaceship.h"
@@ -18,6 +19,8 @@ class InGameState : public State
         SDL_Color     timerColor;
         SpaceShip*    player;
         Uint32*       score;
+        Uint32        asteroidsMass;
+        bool          debug;
 
     public:
         InGameState();
@@ -33,6 +36,7 @@ class InGameState : public State
         void HandleMouseButtonDown(SDL_MouseButtonEvent* event); // obsługa wciśnięcia przycisku myszy
         void HandleMouseWheelScroll(SDL_MouseWheelEvent* event); // obsługa przesunięcia kułeczka myszy
         void SetPlayer(SpaceShip* player);
+        void SetAsteroidsMass(Uint32 mass);
 };
 
 #endif // INGAMESTATE_H

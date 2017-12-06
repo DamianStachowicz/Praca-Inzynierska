@@ -414,17 +414,19 @@ Uint8 Entity::VisibleCopy() {
                 if(location.x + animation.Width() / 2 >= leftEdge) {
                     return LEVEL_COPY_DEFAULT;
                 }
-                if(location.x - animation.Width() / 2 <= bottomEdge) {
+                if(location.x - animation.Width() / 2 <= rightEdge) {
                     return LEVEL_COPY_RIGHT_MIDDLE;
                 }
+                return LEVEL_COPY_DEFAULT;
             } else {
                 // środek kamery po lewej
                 if(location.x + animation.Width() / 2 >= leftEdge) {
                     return LEVEL_COPY_LEFT_MIDDLE;
                 }
-                if(location.x - animation.Width() / 2 <= bottomEdge) {
+                if(location.x - animation.Width() / 2 <= rightEdge) {
                     return LEVEL_COPY_DEFAULT;
                 }
+                return LEVEL_COPY_DEFAULT;
             }
         } else {
             // kamera podzielona na cztery
@@ -454,6 +456,7 @@ Uint8 Entity::VisibleCopy() {
                         return LEVEL_COPY_LEFT_TOP;
                     }
                 }
+                return LEVEL_COPY_DEFAULT;
             } else if(leftEdge <= level.r - Camera::camera.windowWidth / 2 &&
                       bottomEdge >= -level.r + Camera::camera.windowHeight / 2) {
                 // środek kamery w prawym górnym rogu
@@ -479,6 +482,7 @@ Uint8 Entity::VisibleCopy() {
                         return LEVEL_COPY_MIDDLE_TOP;
                     }
                 }
+                return LEVEL_COPY_DEFAULT;
             } else if(leftEdge <= level.r - Camera::camera.windowWidth / 2 &&
                       topEdge <= level.r - Camera::camera.windowHeight / 2) {
                 // środek kamery w prawym dolnym rogu
@@ -504,6 +508,7 @@ Uint8 Entity::VisibleCopy() {
                         return LEVEL_COPY_DEFAULT;
                     }
                 }
+                return LEVEL_COPY_DEFAULT;
             } else {
                 // środek kamery w lewym dolnym rogu
                 if(location.y - animation.Height() / 2 <= bottomEdge) {
@@ -528,6 +533,7 @@ Uint8 Entity::VisibleCopy() {
                         return LEVEL_COPY_LEFT_MIDDLE;
                     }
                 }
+                return LEVEL_COPY_DEFAULT;
             }
         }
     }

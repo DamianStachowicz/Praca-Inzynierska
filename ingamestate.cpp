@@ -41,10 +41,12 @@ void InGameState::Init(SpaceShip* player, Uint32* score, std::function<void()> C
     scoreTexture = new Texture(renderer, "0", font, scoreColor);
     scoreBg = new Texture(renderer, "gfx/buttonBlue.png");
     timerTexture = new Texture(renderer, Entity::level.TimeLeftString(), font, timerColor);
+
+    debug = true;
 }
 
 void InGameState::Loop() {
-    if(player->Health() <= 0 || Entity::level.TimeLeft() <= 0) {
+    if(player->Health() <= 0 || Entity::level.TimeLeft() <= 0 || *score == asteroidsMass) {
         ChangeState();
     }
     while( (SDL_GetTicks() - Entity::timer.lastFrameTime) < (1000 / Entity::timer.GetFPS()) ) {
@@ -91,13 +93,39 @@ void InGameState::Render() {
     // Renderowanie encji
     for(uint i = 0; i < Entity::entities.size(); i++) {
         Entity* ent = Entity::entities[i];
-        ent->RenderCopy(ent->VisibleCopy());
+        if(debug) {
+            ent->RenderCopy(ent->VisibleCopy());
+            circleRGBA(renderer, ent->location.x - Camera::camera.location.x + windowWidth / 2,
+                       ent->location.y - Camera::camera.location.y + windowHeight / 2, ent->r,
+                       0xFF, 0xFF, 0x00, 0xFF);
+        }
     }
 
     // Rysowanie interfejsu
     scoreBg->Render(0, 0, 10, 10, 0);
     scoreTexture->Render(0, 0, scoreBg->Width() - scoreTexture->Width(), 11, 0);
     timerTexture->Render(0, 0, windowWidth / 2 - 10, 10, 0);
+
+    // DEBUG
+    if(debug) {
+        SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0x00, 0xFF );
+        SDL_RenderDrawLine(renderer, windowWidth / 2 - 5, windowHeight / 2 - 5, windowWidth / 2 + 5, windowHeight / 2 + 5);
+        SDL_RenderDrawLine(renderer, windowWidth / 2 - 5, windowHeight / 2 + 5, windowWidth / 2 + 5, windowHeight / 2 - 5);
+        SDL_SetRenderDrawColor( renderer, 0x00, 0x00, 0xFF, 0xFF );
+        SDL_RenderDrawLine(renderer,
+                           0, -Entity::level.r - Camera::camera.location.y + windowHeight / 2,
+                           windowWidth, -Entity::level.r - Camera::camera.location.y + windowHeight / 2);
+        SDL_RenderDrawLine(renderer,
+                           0, Entity::level.r - Camera::camera.location.y + windowHeight / 2,
+                           windowWidth, Entity::level.r - Camera::camera.location.y + windowHeight / 2);
+        SDL_RenderDrawLine(renderer,
+                           -Entity::level.r - Camera::camera.location.x + windowWidth / 2, 0,
+                           -Entity::level.r - Camera::camera.location.x + windowWidth / 2, windowWidth);
+        SDL_RenderDrawLine(renderer,
+                           Entity::level.r - Camera::camera.location.x + windowWidth / 2, 0,
+                           Entity::level.r - Camera::camera.location.x + windowWidth / 2, windowWidth);
+        SDL_SetRenderDrawColor( renderer, 0x00, 0x00, 0x00, 0xFF );
+    }
 
     // Rysowanie wyrenderowanej klatki
     SDL_RenderPresent(renderer);
@@ -180,4 +208,8 @@ void InGameState::HandleMouseWheelScroll(SDL_MouseWheelEvent *event) {
 
 void InGameState::SetPlayer(SpaceShip *player) {
     this->player = player;
+}
+
+void InGameState::SetAsteroidsMass(Uint32 mass) {
+    this->asteroidsMass = mass;
 }

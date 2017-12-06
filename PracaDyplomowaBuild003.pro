@@ -29,7 +29,7 @@ SOURCES += main.cpp \
     menustate.cpp \
     lvlpickstate.cpp
 
-LIBS += -lSDL2 -lSDL2_image -lSDL2_ttf -ltinyxml2
+LIBS += -lSDL2 -lSDL2_image -lSDL2_ttf -ltinyxml2 -lSDL2_gfx
 
 HEADERS += \
     engine.h \
