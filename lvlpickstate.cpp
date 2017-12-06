@@ -41,6 +41,7 @@ void LvlPickState::Init(std::function<void()> ChangeState, std::function<void()>
         if(x.second) {
             btn = new Button(renderer, defaultBtn, selectedBtn, TTF_OpenFont( "ttf/kenvector_future.ttf", 40 ),
                              std::to_string(i), {0x0, 0x0, 0x0, 0xFF}, windowWidth / 2 - 111, 20 + 60 * (i - 1), ChangeState);
+            lastLevel = std::to_string(i);
         } else {
             btn = new Button(renderer, defaultBtn, selectedBtn, TTF_OpenFont( "ttf/kenvector_future.ttf", 20 ),
                              "zablokowany", {0x0, 0x0, 0x0, 0xFF}, windowWidth / 2 - 111, 20 + 60 * (i - 1), ChangeState);
@@ -67,4 +68,8 @@ void LvlPickState::HandleKeyDown() {
     } else if( keyStates[ SDL_SCANCODE_ESCAPE ] ) {
         Return2Menu();
     }
+}
+
+std::string LvlPickState::LastLevel() {
+    return btn2lvl[lastLevel];
 }

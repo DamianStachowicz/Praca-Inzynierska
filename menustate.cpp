@@ -4,12 +4,13 @@ MenuState::MenuState() {
 
 }
 
-MenuState::MenuState(SDL_Renderer *renderer, Uint32 windowWidth, Uint32 windowHeight, Texture *background) {
+MenuState::MenuState(SDL_Renderer *renderer, Uint32 windowWidth, Uint32 windowHeight, Texture *background, std::function<void()> EndProgram) {
     this->renderer = renderer;
     this->windowHeight = windowHeight;
     this->windowWidth = windowWidth;
     this->background = background;
     currentBtnIdx = 0;
+    this->EndProgram = EndProgram;
 }
 
 void MenuState::AddButton(Button* btn) {
@@ -61,6 +62,8 @@ void MenuState::HandleKeyDown() {
         ButtonUp();
     } else if( keyStates[ SDL_SCANCODE_RETURN ] ) {
         buttons[ currentBtnIdx ]->OnClick();
+    } else if( keyStates[ SDL_SCANCODE_ESCAPE ] ) {
+        EndProgram();
     }
 }
 

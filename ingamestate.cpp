@@ -177,3 +177,7 @@ void InGameState::HandleMouseMotion(SDL_MouseMotionEvent *event) {
 void InGameState::HandleMouseWheelScroll(SDL_MouseWheelEvent *event) {
     // Camera::camera.zoom += (double)event->y / 10;
 }
+
+void InGameState::SetPlayer(SpaceShip *player) {
+    this->player = player;
+}

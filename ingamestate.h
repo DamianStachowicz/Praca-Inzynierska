@@ -32,6 +32,7 @@ class InGameState : public State
         void HandleMouseMotion(SDL_MouseMotionEvent* event); // obsługa zdarzenia poruszenia kursorem
         void HandleMouseButtonDown(SDL_MouseButtonEvent* event); // obsługa wciśnięcia przycisku myszy
         void HandleMouseWheelScroll(SDL_MouseWheelEvent* event); // obsługa przesunięcia kułeczka myszy
+        void SetPlayer(SpaceShip* player);
 };
 
 #endif // INGAMESTATE_H

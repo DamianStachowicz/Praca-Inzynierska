@@ -99,7 +99,8 @@ bool Engine::Init() {
 
     // Inicjalizacja stanów gry
     Texture* menuBg = new Texture(renderer, "gfx/darkPurple.png");
-    menuState = MenuState(renderer, windowWidth, windowHeight, menuBg);
+    std::function<void()> func2 = std::bind(&Engine::EndProgram, this);
+    menuState = MenuState(renderer, windowWidth, windowHeight, menuBg, func2);
     Texture* defaultBtn  = new Texture(renderer, "gfx/buttonBlue.png");
     Texture* selectedBtn = new Texture(renderer, "gfx/buttonRed.png");
     std::function<void()> func = std::bind(&Engine::StartGame, this);
@@ -122,7 +123,7 @@ bool Engine::Init() {
 
     lvlPickState = LvlPickState(renderer, windowWidth, windowHeight, menuBg);
     func = std::bind(&Engine::LoadLevel, this);
-    std::function<void()> func2 = std::bind(&Engine::Return2Menu, this);
+    func2 = std::bind(&Engine::Return2Menu, this);
     lvlPickState.Init(func, func2);
 
     currentState = &menuState;
@@ -273,7 +274,14 @@ bool Engine::Deserialize(tinyxml2::XMLNode *root) {
 }
 
 void Engine::StartGame() {
+    tinyxml2::XMLDocument xmlDoc;
+    std::string filename = lvlPickState.LastLevel();
+    xmlDoc.LoadFile(("lvl/" + filename).c_str());
+    tinyxml2::XMLNode* root = xmlDoc.FirstChild();
+    Deserialize(root);
+
     Entity::level.Reset();
+    inGameState.SetPlayer(player);
     currentState = &inGameState;
 }
 
@@ -287,7 +295,7 @@ void Engine::LoadLevel() {
     if(filename == "zablokowany") {
         return;
     }
-    xmlDoc.LoadFile(filename.c_str());
+    xmlDoc.LoadFile(("lvl/" + filename).c_str());
     tinyxml2::XMLNode* root = xmlDoc.FirstChild();
     Deserialize(root);
     currentState = &inGameState;

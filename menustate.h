@@ -12,10 +12,11 @@ class MenuState : public State
         std::vector<Button*> buttons;
         Uint16 currentBtnIdx;
         Texture* background;
+        std::function<void()> EndProgram;
 
     public:
         MenuState();
-        MenuState(SDL_Renderer* renderer, Uint32 windowWidth, Uint32 windowHeight, Texture* background);
+        MenuState(SDL_Renderer* renderer, Uint32 windowWidth, Uint32 windowHeight, Texture* background, std::function<void()> EndProgram);
 
         void AddButton(Button* btn);
         void ButtonUp();

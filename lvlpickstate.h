@@ -12,6 +12,7 @@ class LvlPickState : public MenuState
         std::map<std::string, bool> levels;
         std::map<std::string, std::string> btn2lvl;
         std::function<void()> Return2Menu;
+        std::string lastLevel;
 
     public:
         LvlPickState();
@@ -20,7 +21,7 @@ class LvlPickState : public MenuState
         void Init(std::function<void()> ChangeState, std::function<void()> Return2Menu);
         std::string Filename();
         void HandleKeyDown(); // obsługa wciśnięcia klawisza na klawiaturze
-
+        std::string LastLevel();
 };
 
 #endif // LVLPICKSTATE_H

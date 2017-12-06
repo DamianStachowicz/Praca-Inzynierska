@@ -22,8 +22,6 @@ class SpaceShip: public Entity
         void Rotate(double angle);
         void Shoot(SDL_Renderer* renderer, vector2d initVelocity);
         Sint8 Health();
-        bool Serialize(std::ofstream& file);
-        bool Deserialize(std::ifstream& file, SDL_Renderer* renderer);
         bool Deserialize(tinyxml2::XMLElement* root, SDL_Renderer* renderer);
         void DecreaseHealth(double amount);
         Uint8 VisibleCopy();
