@@ -6,13 +6,24 @@
 #include <menustate.h>
 #include <tinyxml2.h>
 
+struct lvl {
+    std::string filename;
+    bool        unlocked;
+    Uint32      unlockScore;
+    Uint32      bestScore;
+};
+
 class LvlPickState : public MenuState
 {
     private:
-        std::map<std::string, bool> levels;
+        std::vector<lvl> levels;
+        std::string lastLevel;
         std::map<std::string, std::string> btn2lvl;
         std::function<void()> Return2Menu;
-        std::string lastLevel;
+        std::string selectedLevel;
+
+        void LoadCfgFile();
+        void RewriteCfgFile();
 
     public:
         LvlPickState();
@@ -22,6 +33,7 @@ class LvlPickState : public MenuState
         std::string Filename();
         void HandleKeyDown(); // obsługa wciśnięcia klawisza na klawiaturze
         std::string LastLevel();
+        void UpdateBestScore(Uint32 score);
 };
 
 #endif // LVLPICKSTATE_H

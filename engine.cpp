@@ -289,13 +289,14 @@ void Engine::StartGame() {
 }
 
 void Engine::EndGame() {
+    lvlPickState.UpdateBestScore(score);
     currentState = &menuState;
 }
 
 void Engine::LoadLevel() {
     tinyxml2::XMLDocument xmlDoc;
     std::string filename = lvlPickState.Filename();
-    if(filename == "zablokowany") {
+    if(filename == "") {
         return;
     }
     xmlDoc.LoadFile(("lvl/" + filename).c_str());

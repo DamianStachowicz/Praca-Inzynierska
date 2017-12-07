@@ -184,7 +184,6 @@ void Entity::Bounce(Entity *ent) {
     double a = (velocity - ent->velocity) * loc;
     double b = loc.Length() * loc.Length();
     velocity = velocity - loc * (massFactor * a / b);
-    std::cout << (int)type << " (" << velocity.x << ":" << velocity.y << ")" << std::endl;
 }
 
 vector2d Entity::GetMinimapLocation(double ratio) {
