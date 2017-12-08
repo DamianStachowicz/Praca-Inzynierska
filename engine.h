@@ -21,6 +21,7 @@
 #include "ingamestate.h"
 #include "menustate.h"
 #include "lvlpickstate.h"
+#include "creditsstate.h"
 
 /** @class Engine
  *  @brief Silnik gry
@@ -44,6 +45,7 @@ class Engine
         InGameState   inGameState;
         MenuState     menuState;
         LvlPickState  lvlPickState;
+        CreditsState  creditsState;
         State*        currentState;
         Uint32        asteroidsMass;
 
@@ -54,6 +56,7 @@ class Engine
         void LevelPick();
         void EndProgram();
         void Return2Menu();
+        void ShowCredits();
 
     public:
         Uint32 score;

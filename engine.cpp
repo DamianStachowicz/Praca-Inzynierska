@@ -101,6 +101,8 @@ bool Engine::Init() {
     Texture* menuBg = new Texture(renderer, "gfx/darkPurple.png");
     std::function<void()> func2 = std::bind(&Engine::EndProgram, this);
     menuState = MenuState(renderer, windowWidth, windowHeight, menuBg, func2);
+    func2 = std::bind(&Engine::Return2Menu, this);
+    creditsState = CreditsState(renderer, windowWidth, windowHeight, menuBg, func2);
     Texture* defaultBtn  = new Texture(renderer, "gfx/buttonBlue.png");
     Texture* selectedBtn = new Texture(renderer, "gfx/buttonRed.png");
     std::function<void()> func = std::bind(&Engine::StartGame, this);
@@ -112,9 +114,13 @@ bool Engine::Init() {
     btn = new Button(renderer, defaultBtn, selectedBtn, TTF_OpenFont( "ttf/kenvector_future.ttf", 20 ), "Wybierz poziom", {0x0, 0x0, 0x0, 0xFF},
                      windowWidth / 2 - 111, 80, func);
     menuState.AddButton(btn);
+    func = std::bind(&Engine::ShowCredits, this);
+    btn = new Button(renderer, defaultBtn, selectedBtn, font, "Autorzy", {0x0, 0x0, 0x0, 0xFF},
+                     windowWidth / 2 - 111, 140, func);
+    menuState.AddButton(btn);
     func = std::bind(&Engine::EndProgram, this);
     btn = new Button(renderer, defaultBtn, selectedBtn, font, "Wyjdz", {0x0, 0x0, 0x0, 0xFF},
-                     windowWidth / 2 - 111, 140, func);
+                     windowWidth / 2 - 111, 200, func);
     menuState.AddButton(btn);
 
     inGameState = InGameState(renderer, windowWidth, windowHeight);
@@ -325,4 +331,8 @@ void Engine::Clear() {
     score = 0;
     Entity::entities.clear();
     asteroidsMass = 0;
+}
+
+void Engine::ShowCredits() {
+    currentState = &creditsState;
 }

@@ -27,7 +27,8 @@ SOURCES += main.cpp \
     state.cpp \
     ingamestate.cpp \
     menustate.cpp \
-    lvlpickstate.cpp
+    lvlpickstate.cpp \
+    creditsstate.cpp
 
 LIBS += -lSDL2 -lSDL2_image -lSDL2_ttf -ltinyxml2 -lSDL2_gfx
 
@@ -55,4 +56,5 @@ HEADERS += \
     state.h \
     ingamestate.h \
     menustate.h \
-    lvlpickstate.h
+    lvlpickstate.h \
+    creditsstate.h
