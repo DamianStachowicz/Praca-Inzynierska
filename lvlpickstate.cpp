@@ -92,8 +92,10 @@ std::string LvlPickState::LastLevel() {
 
 void LvlPickState::UpdateBestScore(Uint32 score) {
     for(uint i = 0; i < levels.size(); i++) {
-        if(levels[i].filename == btn2lvl[selectedLevel] && levels[i].bestScore <= score) {
-            levels[i].bestScore = score;
+        if(levels[i].filename == btn2lvl[selectedLevel]) {
+            if(levels[i].bestScore <= score) {
+                levels[i].bestScore = score;
+            }
             if(levels[i+1].unlockScore <= score) {
                 levels[i+1].unlocked = true;
             }
@@ -138,4 +140,15 @@ void LvlPickState::RewriteCfgFile() {
     if(result != tinyxml2::XML_SUCCESS) {
         std::cerr << "Nie udało się zakualizować pliku levelList.xml\n";
     }
+}
+
+std::string LvlPickState::NextLevel(std::string filename) {
+    for(uint i = 0; i < levels.size(); i++) {
+        if(filename == levels[i].filename) {
+            i++;
+            selectedLevel = buttons[i]->text;
+            return btn2lvl[selectedLevel];
+        }
+    }
+    return "";
 }

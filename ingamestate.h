@@ -23,9 +23,10 @@ class InGameState : public State
         bool          debug;
 
     public:
+        std::string   filename;
+
         InGameState();
         InGameState(SDL_Renderer* renderer, Uint32 windowWidth, Uint32 windowHeight);
-
         void Init(SpaceShip *player, Uint32* score, std::function<void()> ChangeState);
         void Loop();   // główna pętla gry
         void Render(); // funkcja rysująca obiekty na ekranie

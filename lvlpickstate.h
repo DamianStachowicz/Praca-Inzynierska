@@ -34,6 +34,7 @@ class LvlPickState : public MenuState
         void HandleKeyDown(); // obsługa wciśnięcia klawisza na klawiaturze
         std::string LastLevel();
         void UpdateBestScore(Uint32 score);
+        std::string NextLevel(std::string filename);
 };
 
 #endif // LVLPICKSTATE_H

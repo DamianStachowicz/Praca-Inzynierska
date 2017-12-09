@@ -132,6 +132,18 @@ bool Engine::Init() {
     func2 = std::bind(&Engine::Return2Menu, this);
     lvlPickState.Init(func, func2);
 
+    scoreCountState = ScoreCountState(renderer, windowWidth, windowHeight, menuBg, func2);
+    func = std::bind(&Engine::NextLevel, this);
+    btn = new Button(renderer, defaultBtn, selectedBtn, TTF_OpenFont( "ttf/kenvector_future.ttf", 18 ), "Nastepny poziom",
+                     {0x0, 0x0, 0x0, 0xFF}, windowWidth / 2 - 111, 240, func);
+    scoreCountState.AddButton(btn);
+    btn->Switch();
+
+    func = std::bind(&Engine::LoadLevel, this);
+    btn = new Button(renderer, defaultBtn, selectedBtn, TTF_OpenFont( "ttf/kenvector_future.ttf", 18 ), "Zagraj ponownie",
+                     {0x0, 0x0, 0x0, 0xFF}, windowWidth / 2 - 111, 300, func);
+    scoreCountState.AddButton(btn);
+
     currentState = &menuState;
 
     return true;
@@ -285,6 +297,7 @@ bool Engine::Deserialize(tinyxml2::XMLNode *root) {
 void Engine::StartGame() {
     tinyxml2::XMLDocument xmlDoc;
     std::string filename = lvlPickState.LastLevel();
+    inGameState.filename = filename;
     xmlDoc.LoadFile(("lvl/" + filename).c_str());
     tinyxml2::XMLNode* root = xmlDoc.FirstChild();
     Deserialize(root);
@@ -295,16 +308,18 @@ void Engine::StartGame() {
 }
 
 void Engine::EndGame() {
-    lvlPickState.UpdateBestScore(score);
-    currentState = &menuState;
+    scoreCountState.SetScore(score, player->Health(), Entity::level.TimeLeft() / 10);
+    lvlPickState.UpdateBestScore(score + player->Health() + Entity::level.TimeLeft() / 10);
+    currentState = &scoreCountState;
 }
 
 void Engine::LoadLevel() {
-    tinyxml2::XMLDocument xmlDoc;
     std::string filename = lvlPickState.Filename();
     if(filename == "") {
         return;
     }
+    inGameState.filename = filename;
+    tinyxml2::XMLDocument xmlDoc;
     xmlDoc.LoadFile(("lvl/" + filename).c_str());
     tinyxml2::XMLNode* root = xmlDoc.FirstChild();
     Deserialize(root);
@@ -335,4 +350,19 @@ void Engine::Clear() {
 
 void Engine::ShowCredits() {
     currentState = &creditsState;
+}
+
+void Engine::NextLevel() {
+    std::string filename = lvlPickState.NextLevel(inGameState.filename);
+    if(filename == "") {
+        return;
+    }
+    tinyxml2::XMLDocument xmlDoc;
+    xmlDoc.LoadFile(("lvl/" + filename).c_str());
+    tinyxml2::XMLNode* root = xmlDoc.FirstChild();
+    Deserialize(root);
+
+    inGameState.SetPlayer(player);
+    inGameState.SetAsteroidsMass(asteroidsMass);
+    currentState = &inGameState;
 }

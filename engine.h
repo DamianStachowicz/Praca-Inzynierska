@@ -22,6 +22,7 @@
 #include "menustate.h"
 #include "lvlpickstate.h"
 #include "creditsstate.h"
+#include "scorecountstate.h"
 
 /** @class Engine
  *  @brief Silnik gry
@@ -29,25 +30,26 @@
 class Engine
 {
     private:
-        bool          quit;
-        SDL_Window*   window;
-        SDL_Renderer* renderer;
-        Uint32        windowWidth;
-        Uint32        windowHeight;
-        const Uint8*  keyStates;
-        SpaceShip*    player;
-        TTF_Font*     font;
-        Texture*      scoreTexture;
-        SDL_Color     scoreColor;
-        Texture*      scoreBg;
-        Texture*      timerTexture;
-        SDL_Color     timerColor;
-        InGameState   inGameState;
-        MenuState     menuState;
-        LvlPickState  lvlPickState;
-        CreditsState  creditsState;
-        State*        currentState;
-        Uint32        asteroidsMass;
+        bool            quit;
+        SDL_Window*     window;
+        SDL_Renderer*   renderer;
+        Uint32          windowWidth;
+        Uint32          windowHeight;
+        const Uint8*    keyStates;
+        SpaceShip*      player;
+        TTF_Font*       font;
+        Texture*        scoreTexture;
+        SDL_Color       scoreColor;
+        Texture*        scoreBg;
+        Texture*        timerTexture;
+        SDL_Color       timerColor;
+        InGameState     inGameState;
+        MenuState       menuState;
+        LvlPickState    lvlPickState;
+        CreditsState    creditsState;
+        ScoreCountState scoreCountState;
+        State*          currentState;
+        Uint32          asteroidsMass;
 
         // przełączanie stanów
         void StartGame();
@@ -57,6 +59,7 @@ class Engine
         void EndProgram();
         void Return2Menu();
         void ShowCredits();
+        void NextLevel();
 
     public:
         Uint32 score;
