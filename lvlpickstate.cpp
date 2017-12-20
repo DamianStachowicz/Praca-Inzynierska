@@ -146,6 +146,7 @@ std::string LvlPickState::NextLevel(std::string filename) {
     for(uint i = 0; i < levels.size(); i++) {
         if(filename == levels[i].filename) {
             i++;
+            currentBtnIdx = i;
             selectedLevel = buttons[i]->text;
             return btn2lvl[selectedLevel];
         }

@@ -42,7 +42,7 @@ void InGameState::Init(SpaceShip* player, Uint32* score, std::function<void()> C
     scoreBg = new Texture(renderer, "gfx/buttonBlue.png");
     timerTexture = new Texture(renderer, Entity::level.TimeLeftString(), font, timerColor);
 
-    debug = true;
+    debug = false;
 }
 
 void InGameState::Loop() {
@@ -93,8 +93,8 @@ void InGameState::Render() {
     // Renderowanie encji
     for(uint i = 0; i < Entity::entities.size(); i++) {
         Entity* ent = Entity::entities[i];
+        ent->RenderCopy(ent->VisibleCopy());
         if(debug) {
-            ent->RenderCopy(ent->VisibleCopy());
             circleRGBA(renderer, ent->location.x - Camera::camera.location.x + windowWidth / 2,
                        ent->location.y - Camera::camera.location.y + windowHeight / 2, ent->r,
                        0xFF, 0xFF, 0x00, 0xFF);
@@ -164,6 +164,8 @@ void InGameState::HandleKeyDown() {
         player->stop = true;
     } else if( keyStates[ SDL_SCANCODE_W ] ) {
         player->advance = true;
+    } else if( keyStates[ SDL_SCANCODE_F1 ] ) {
+        debug = !debug;
     }
 //    if( keyStates[ SDL_SCANCODE_E ] ) {
 //        Camera::camera.zoom += 0.01;

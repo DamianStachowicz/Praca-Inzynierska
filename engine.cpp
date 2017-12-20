@@ -353,7 +353,7 @@ void Engine::ShowCredits() {
 }
 
 void Engine::NextLevel() {
-    std::string filename = lvlPickState.NextLevel(inGameState.filename);
+    std::string filename = lvlPickState.NextLevel(lvlPickState.Filename());
     if(filename == "") {
         return;
     }

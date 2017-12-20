@@ -20,7 +20,7 @@ void SpaceShip::Collide() {
         }
         double sum = r + ent->r;
         vector2d direction = (location - ent->location).Direction();
-        location = ent->location + direction * (sum + 1);
+        location = ent->location + direction * (sum + 2);
     }
     colliding.clear();
 }
