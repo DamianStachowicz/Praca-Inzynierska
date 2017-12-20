@@ -7,7 +7,8 @@ Timer Entity::timer = Timer(60, 1);
 std::vector<Entity*> Entity::entities = std::vector<Entity*>();
 Level Entity::level = Level(800);
 // stała grawitacyjna
-double G = 0.000000000066742;
+// double G = 0.000000000066742;
+double G = 0.0000000066742;
 
 Entity::Entity()
 {
